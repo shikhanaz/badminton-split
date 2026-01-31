@@ -8,9 +8,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>🏸 Badminton Cost Splitter</title>
     
-    <!-- Supabase JS Library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,7 +45,6 @@
             padding-bottom: 120px;
         }
 
-        /* Header */
         .app-header {
             display: flex;
             align-items: center;
@@ -111,7 +107,6 @@
             50% { opacity: 0.5; }
         }
 
-        /* Hero Section */
         .hero-section {
             padding: 20px;
         }
@@ -133,7 +128,7 @@
             position: absolute;
             inset: 0;
             background: url('https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800&q=80') center/cover;
-            opacity: 0.7;
+            opacity: 0.6;
         }
 
         .hero-emoji {
@@ -143,7 +138,6 @@
             text-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
-        /* Session Info */
         .session-info {
             padding: 0 20px 20px;
         }
@@ -172,12 +166,10 @@
             font-size: 0.9rem;
         }
 
-        /* Container */
         .container {
             padding: 0 20px;
         }
 
-        /* Tabs */
         .tabs {
             display: flex;
             gap: 6px;
@@ -221,7 +213,6 @@
             display: block;
         }
 
-        /* Cards */
         .card {
             background: var(--bg-card);
             border-radius: 16px;
@@ -242,7 +233,6 @@
             margin-bottom: 16px;
         }
 
-        /* Session Container */
         .session-container {
             background: var(--bg-secondary);
             border-radius: 12px;
@@ -275,7 +265,6 @@
             font-family: inherit;
         }
 
-        /* Input Groups */
         .input-group {
             margin-bottom: 14px;
         }
@@ -321,7 +310,6 @@
             position: relative;
         }
 
-        /* Player Tags */
         .player-tags {
             display: flex;
             flex-wrap: wrap;
@@ -352,7 +340,6 @@
             opacity: 1;
         }
 
-        /* Add Player Row */
         .add-player-row {
             display: flex;
             gap: 8px;
@@ -374,7 +361,6 @@
             font-family: inherit;
         }
 
-        /* Buttons */
         .btn {
             padding: 14px 20px;
             border: none;
@@ -417,7 +403,6 @@
             border: 1.5px solid var(--accent-green);
         }
 
-        /* Quick Add */
         .quick-add {
             display: flex;
             flex-wrap: wrap;
@@ -442,7 +427,6 @@
             border-color: var(--accent-green);
         }
 
-        /* Summary Stats */
         .summary-stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -472,7 +456,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Player List */
         .player-list {
             margin-top: 12px;
         }
@@ -546,7 +529,6 @@
             color: var(--bg-primary);
         }
 
-        /* Badge */
         .badge {
             background: var(--accent-green);
             color: var(--bg-primary);
@@ -563,7 +545,6 @@
             margin-bottom: 12px;
         }
 
-        /* Bottom Bar */
         .bottom-bar {
             position: fixed;
             bottom: 0;
@@ -604,7 +585,6 @@
             color: var(--accent-green);
         }
 
-        /* History Item */
         .history-item {
             background: var(--bg-secondary);
             border-radius: 12px;
@@ -656,7 +636,6 @@
             color: var(--text-muted);
         }
 
-        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 40px 20px;
@@ -673,7 +652,6 @@
             font-size: 0.9rem;
         }
 
-        /* Settings */
         .settings-input {
             margin-bottom: 14px;
         }
@@ -724,7 +702,13 @@
             border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
-        /* Location Suggestions */
+        .settings-status.warning {
+            display: block;
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
         .location-suggestions {
             position: absolute;
             top: 100%;
@@ -755,7 +739,6 @@
             background: var(--bg-secondary);
         }
 
-        /* Toast */
         .toast {
             position: fixed;
             bottom: 100px;
@@ -772,13 +755,14 @@
             border: 1px solid var(--border-color);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
             pointer-events: none;
+            max-width: 90%;
+            text-align: center;
         }
 
         .toast.show {
             opacity: 1;
         }
 
-        /* Spinner */
         .spinner {
             display: inline-block;
             width: 16px;
@@ -793,7 +777,36 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Responsive */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-overlay.hidden {
+            display: none;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-radius: 50%;
+            border-top-color: var(--accent-green);
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        .loading-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 380px) {
             .stat-box .number {
                 font-size: 1rem;
@@ -813,13 +826,19 @@
     </style>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading Supabase...</div>
+    </div>
+
     <!-- App Header -->
     <header class="app-header">
         <button class="back-btn" onclick="window.location.reload()">‹</button>
         <h1>Weekly Game RSVP</h1>
         <div class="connection-badge">
             <span class="status-dot" id="status-dot"></span>
-            <span id="status-text">Connecting...</span>
+            <span id="status-text">Loading...</span>
         </div>
     </header>
 
@@ -854,9 +873,7 @@
             <div class="card">
                 <h2>📋 Session Details</h2>
                 <p class="card-subtitle">Add court info and players who attended</p>
-                
                 <div id="sessions-container"></div>
-                
                 <button class="btn btn-outline" onclick="addSession()" style="margin-top: 8px;">
                     ➕ Add Another Session
                 </button>
@@ -944,6 +961,10 @@
                 <h2>🔗 Database Connection</h2>
                 <p class="card-subtitle">Connect to Supabase for cloud sync</p>
                 
+                <div id="library-status" class="settings-status warning" style="display: block; margin-bottom: 16px;">
+                    ⏳ Loading Supabase library...
+                </div>
+                
                 <div class="settings-input" style="margin-top: 16px;">
                     <label>Supabase Project URL</label>
                     <input type="url" id="supabase-url" placeholder="https://xxxxx.supabase.co">
@@ -954,7 +975,7 @@
                     <input type="text" id="supabase-key" placeholder="eyJhbGciOiJIUzI1NiIs...">
                 </div>
                 
-                <button class="btn btn-primary" onclick="saveSupabaseConfig()">
+                <button class="btn btn-primary" onclick="saveSupabaseConfig()" id="connect-btn">
                     🔌 Connect
                 </button>
                 
@@ -1011,22 +1032,99 @@
     <!-- Toast -->
     <div class="toast" id="toast">Message</div>
 
+    <!-- Load Supabase with multiple fallbacks -->
     <script>
-        // ============ CONFIGURATION ============
-        var supabase = null;
+        // Global variables
+        var supabaseLib = null;
+        var supabaseClient = null;
         var sessionCounter = 0;
         var currency = 'AED';
         var allPlayers = [];
         var savedLocations = [];
         var calculationResults = null;
         var historyData = [];
+        var libraryLoaded = false;
 
-        // ============ INITIALIZATION ============
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🏸 Badminton Cost Splitter initializing...');
-            loadSupabaseConfig();
+        // CDN URLs to try (in order)
+        var cdnUrls = [
+            'https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.min.js',
+            'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/supabase/2.39.3/supabase.min.js'
+        ];
+
+        var currentCdnIndex = 0;
+
+        // Try to load Supabase library
+        function loadSupabaseLibrary() {
+            if (currentCdnIndex >= cdnUrls.length) {
+                onLibraryLoadFailed();
+                return;
+            }
+
+            var script = document.createElement('script');
+            script.src = cdnUrls[currentCdnIndex];
+            script.async = true;
+
+            script.onload = function() {
+                console.log('✅ Supabase loaded from:', cdnUrls[currentCdnIndex]);
+                onLibraryLoaded();
+            };
+
+            script.onerror = function() {
+                console.warn('❌ Failed to load from:', cdnUrls[currentCdnIndex]);
+                currentCdnIndex++;
+                loadSupabaseLibrary();
+            };
+
+            document.head.appendChild(script);
+        }
+
+        function onLibraryLoaded() {
+            libraryLoaded = true;
+            
+            // Check which global is available
+            if (typeof supabase !== 'undefined') {
+                supabaseLib = supabase;
+            } else if (typeof Supabase !== 'undefined') {
+                supabaseLib = Supabase;
+            } else if (typeof window.supabase !== 'undefined') {
+                supabaseLib = window.supabase;
+            }
+
+            if (supabaseLib) {
+                document.getElementById('library-status').className = 'settings-status success';
+                document.getElementById('library-status').textContent = '✓ Supabase library loaded';
+                document.getElementById('loading-overlay').classList.add('hidden');
+                
+                // Try to auto-connect if credentials exist
+                loadSupabaseConfig();
+                addSession();
+                updateSessionTitle();
+            } else {
+                onLibraryLoadFailed();
+            }
+        }
+
+        function onLibraryLoadFailed() {
+            libraryLoaded = false;
+            document.getElementById('library-status').className = 'settings-status error';
+            document.getElementById('library-status').innerHTML = '✗ Failed to load Supabase library.<br>Please check your internet connection and refresh.';
+            document.getElementById('loading-overlay').classList.add('hidden');
+            document.getElementById('connect-btn').disabled = true;
+            updateConnectionStatus('error', 'Library failed');
+            
+            document.getElementById('quick-add-players').innerHTML = 
+                '<span style="color: var(--error); font-size: 0.85rem;">⚠️ Could not load database library. Check internet connection.</span>';
+            
+            // Still allow offline usage
             addSession();
             updateSessionTitle();
+        }
+
+        // Start loading
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🏸 App starting...');
+            loadSupabaseLibrary();
         });
 
         // ============ SESSION TITLE UPDATE ============
@@ -1094,11 +1192,27 @@
         }
 
         function saveSupabaseConfig() {
+            if (!libraryLoaded || !supabaseLib) {
+                showToast('Supabase library not loaded. Refresh the page.');
+                return;
+            }
+
             var url = document.getElementById('supabase-url').value.trim();
             var key = document.getElementById('supabase-key').value.trim();
             
             if (!url || !key) {
                 showToast('Please enter both URL and Key');
+                return;
+            }
+
+            // Basic validation
+            if (!url.includes('supabase.co')) {
+                showToast('Invalid Supabase URL');
+                return;
+            }
+
+            if (!key.startsWith('eyJ')) {
+                showToast('Invalid Supabase Key');
                 return;
             }
             
@@ -1109,33 +1223,52 @@
         }
 
         async function initializeSupabase(url, key) {
+            if (!libraryLoaded || !supabaseLib) {
+                updateConnectionStatus('error', 'Library not loaded');
+                var statusEl = document.getElementById('settings-status');
+                statusEl.textContent = '✗ Supabase library not loaded. Please refresh the page.';
+                statusEl.className = 'settings-status error';
+                return;
+            }
+
             try {
                 updateConnectionStatus('connecting', 'Connecting...');
                 
-                supabase = window.supabase.createClient(url, key);
+                // Create client
+                if (supabaseLib.createClient) {
+                    supabaseClient = supabaseLib.createClient(url, key);
+                } else {
+                    throw new Error('createClient method not found');
+                }
                 
-                var result = await supabase.from('players').select('id').limit(1);
+                console.log('Testing connection...');
+                
+                // Test connection
+                var result = await supabaseClient.from('players').select('id').limit(1);
                 
                 if (result.error) {
                     throw result.error;
                 }
                 
+                console.log('✅ Connected to Supabase!');
                 updateConnectionStatus('connected', 'Connected');
                 
                 var statusEl = document.getElementById('settings-status');
                 statusEl.textContent = '✓ Connected successfully!';
                 statusEl.className = 'settings-status success';
                 
+                // Load data
                 await loadPlayers();
                 await loadLocations();
                 await loadHistory();
                 
             } catch (error) {
                 console.error('Connection error:', error);
+                supabaseClient = null;
                 updateConnectionStatus('error', 'Failed');
                 
                 var statusEl = document.getElementById('settings-status');
-                statusEl.textContent = '✗ ' + (error.message || 'Connection failed');
+                statusEl.textContent = '✗ ' + (error.message || 'Connection failed. Check your credentials.');
                 statusEl.className = 'settings-status error';
             }
         }
@@ -1153,10 +1286,10 @@
 
         // ============ PLAYERS ============
         async function loadPlayers() {
-            if (!supabase) return;
+            if (!supabaseClient) return;
             
             try {
-                var result = await supabase
+                var result = await supabaseClient
                     .from('players')
                     .select('*')
                     .eq('is_active', true)
@@ -1170,6 +1303,22 @@
                 
             } catch (error) {
                 console.error('Error loading players:', error);
+                
+                // Try without is_active filter (in case column doesn't exist)
+                try {
+                    var result2 = await supabaseClient
+                        .from('players')
+                        .select('*')
+                        .order('name');
+                    
+                    if (!result2.error) {
+                        allPlayers = result2.data || [];
+                        updateQuickAddButtons();
+                        updatePlayersListInSettings();
+                    }
+                } catch (e) {
+                    console.error('Fallback also failed:', e);
+                }
             }
         }
 
@@ -1216,7 +1365,7 @@
         }
 
         async function addNewPlayerToDatabase() {
-            if (!supabase) {
+            if (!supabaseClient) {
                 showToast('Connect to database first');
                 return;
             }
@@ -1230,7 +1379,7 @@
             }
             
             try {
-                var result = await supabase
+                var result = await supabaseClient
                     .from('players')
                     .insert([{ name: name }])
                     .select();
@@ -1258,10 +1407,19 @@
             if (!confirm('Delete this player?')) return;
             
             try {
-                var result = await supabase
+                // Try soft delete first
+                var result = await supabaseClient
                     .from('players')
                     .update({ is_active: false })
                     .eq('id', playerId);
+                
+                if (result.error) {
+                    // Try hard delete if soft delete fails
+                    result = await supabaseClient
+                        .from('players')
+                        .delete()
+                        .eq('id', playerId);
+                }
                 
                 if (result.error) throw result.error;
                 
@@ -1276,10 +1434,10 @@
 
         // ============ LOCATIONS ============
         async function loadLocations() {
-            if (!supabase) return;
+            if (!supabaseClient) return;
             
             try {
-                var result = await supabase
+                var result = await supabaseClient
                     .from('sessions')
                     .select('court_location')
                     .order('created_at', { ascending: false })
@@ -1550,7 +1708,7 @@
 
             displayResults(calculationResults);
             
-            if (supabase) {
+            if (supabaseClient) {
                 document.getElementById('save-btn').style.display = 'block';
             }
             
@@ -1597,8 +1755,8 @@
 
         // ============ SAVE TO DATABASE ============
         async function saveToDatabase() {
-            if (!supabase || !calculationResults) {
-                showToast('Cannot save');
+            if (!supabaseClient || !calculationResults) {
+                showToast('Cannot save - not connected');
                 return;
             }
 
@@ -1613,7 +1771,7 @@
                 for (var i = 0; i < calculationResults.sessions.length; i++) {
                     var session = calculationResults.sessions[i];
                     
-                    var sessionResult = await supabase
+                    var sessionResult = await supabaseClient
                         .from('sessions')
                         .insert([{
                             session_date: session.date,
@@ -1633,7 +1791,7 @@
                         var playerId = player.id;
                         
                         if (!playerId) {
-                            var findResult = await supabase
+                            var findResult = await supabaseClient
                                 .from('players')
                                 .select('id')
                                 .ilike('name', player.name)
@@ -1642,7 +1800,7 @@
                             if (findResult.data) {
                                 playerId = findResult.data.id;
                             } else {
-                                var newResult = await supabase
+                                var newResult = await supabaseClient
                                     .from('players')
                                     .insert([{ name: player.name }])
                                     .select();
@@ -1654,7 +1812,7 @@
                         }
 
                         if (playerId) {
-                            await supabase
+                            await supabaseClient
                                 .from('session_attendance')
                                 .insert([{
                                     session_id: sessionId,
@@ -1665,7 +1823,7 @@
                     }
                 }
 
-                await supabase
+                await supabaseClient
                     .from('calculation_history')
                     .insert([{
                         total_cost: calculationResults.totalCost,
@@ -1685,7 +1843,7 @@
 
             } catch (error) {
                 console.error('Save error:', error);
-                showToast('Error: ' + error.message);
+                showToast('Error: ' + (error.message || 'Save failed'));
                 btn.innerHTML = '💾 Save to Database';
                 bottomBtn.innerHTML = '✓ Confirm & Save';
                 btn.disabled = false;
@@ -1695,14 +1853,14 @@
 
         // ============ HISTORY ============
         async function loadHistory() {
-            if (!supabase) {
+            if (!supabaseClient) {
                 document.getElementById('history-container').innerHTML = 
                     '<div class="empty-state"><div class="icon">⚙️</div><p>Connect database in Settings</p></div>';
                 return;
             }
             
             try {
-                var result = await supabase
+                var result = await supabaseClient
                     .from('calculation_history')
                     .select('*')
                     .order('calculation_date', { ascending: false })

@@ -45,7 +45,7 @@
             background: var(--bg-primary);
             min-height: 100vh;
             color: var(--text-primary);
-            padding-bottom: 100px;
+            padding-bottom: 120px;
         }
 
         /* Header */
@@ -57,25 +57,27 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .back-btn {
             background: none;
             border: none;
             color: var(--text-primary);
-            font-size: 24px;
+            font-size: 28px;
             cursor: pointer;
             padding: 8px;
-            margin-right: 12px;
+            margin-right: 8px;
+            line-height: 1;
         }
 
         .app-header h1 {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 600;
+            flex: 1;
         }
 
         .connection-badge {
-            margin-left: auto;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -83,6 +85,7 @@
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 0.75rem;
+            border: 1px solid var(--border-color);
         }
 
         .status-dot {
@@ -90,20 +93,27 @@
             height: 8px;
             border-radius: 50%;
             background: var(--warning);
+            animation: pulse 2s infinite;
         }
 
         .status-dot.connected {
             background: var(--success);
+            animation: none;
         }
 
         .status-dot.error {
             background: var(--error);
+            animation: none;
         }
 
-        /* Hero Image */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Hero Section */
         .hero-section {
-            padding: 0 20px;
-            margin-bottom: 20px;
+            padding: 20px;
         }
 
         .hero-image {
@@ -111,36 +121,38 @@
             height: 180px;
             border-radius: 16px;
             overflow: hidden;
-            position: relative;
-        }
-
-        .hero-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .hero-placeholder {
-            width: 100%;
-            height: 100%;
             background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4rem;
+            position: relative;
         }
 
-        /* Session Info Card */
+        .hero-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800&q=80') center/cover;
+            opacity: 0.7;
+        }
+
+        .hero-emoji {
+            font-size: 4rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        /* Session Info */
         .session-info {
-            padding: 0 20px;
-            margin-bottom: 20px;
+            padding: 0 20px 20px;
         }
 
         .session-label {
             color: var(--accent-green);
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 1px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
             margin-bottom: 8px;
         }
@@ -149,6 +161,7 @@
             font-size: 1.5rem;
             font-weight: 700;
             margin-bottom: 8px;
+            line-height: 1.2;
         }
 
         .session-date {
@@ -156,24 +169,7 @@
             align-items: center;
             gap: 8px;
             color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 16px;
-        }
-
-        .venue-btn {
-            width: 100%;
-            padding: 14px;
-            background: transparent;
-            border: 1.5px solid var(--accent-green);
-            border-radius: 12px;
-            color: var(--accent-green);
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            font-size: 0.9rem;
         }
 
         /* Container */
@@ -181,98 +177,35 @@
             padding: 0 20px;
         }
 
-        /* Cards */
-        .card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .card h2 {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .card-subtitle {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            margin-top: 4px;
-        }
-
-        /* Info Rows */
-        .info-row {
-            display: flex;
-            align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-row .icon {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            margin-right: 12px;
-        }
-
-        .info-row .label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .info-row .value {
-            margin-left: auto;
-            font-weight: 500;
-            text-align: right;
-        }
-
-        .info-row .value.warning {
-            color: var(--accent-orange);
-        }
-
-        .info-row .value .subtext {
-            font-size: 0.75rem;
-            color: var(--accent-orange);
-            text-transform: uppercase;
-        }
-
         /* Tabs */
         .tabs {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             padding: 0 20px;
             margin-bottom: 20px;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
         }
 
         .tab {
             flex: 1;
-            min-width: 80px;
-            padding: 12px 16px;
+            min-width: 70px;
+            padding: 12px 14px;
             border: none;
-            border-radius: 12px;
-            font-size: 0.85rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
             font-weight: 600;
             cursor: pointer;
             background: var(--bg-card);
             color: var(--text-secondary);
             white-space: nowrap;
             transition: all 0.2s;
+            font-family: inherit;
         }
 
         .tab.active {
@@ -288,45 +221,25 @@
             display: block;
         }
 
-        /* Input Groups */
-        .input-group {
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
             margin-bottom: 16px;
+            border: 1px solid var(--border-color);
         }
 
-        .input-group label {
-            display: block;
+        .card h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .card-subtitle {
             color: var(--text-secondary);
-            font-size: 0.85rem;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .input-group input,
-        .input-group select {
-            width: 100%;
-            padding: 14px 16px;
-            background: var(--bg-input);
-            border: 1.5px solid var(--border-color);
-            border-radius: 12px;
-            font-size: 16px;
-            color: var(--text-primary);
-            font-family: inherit;
-        }
-
-        .input-group input:focus,
-        .input-group select:focus {
-            outline: none;
-            border-color: var(--accent-green);
-        }
-
-        .input-group input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .input-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            font-size: 0.8rem;
+            margin-bottom: 16px;
         }
 
         /* Session Container */
@@ -346,19 +259,66 @@
         }
 
         .session-header h3 {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             color: var(--accent-green);
         }
 
         .delete-btn {
-            background: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.15);
             color: var(--error);
             border: none;
             border-radius: 8px;
             padding: 8px 12px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             cursor: pointer;
+            font-family: inherit;
+        }
+
+        /* Input Groups */
+        .input-group {
+            margin-bottom: 14px;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-input);
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 16px;
+            color: var(--text-primary);
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--accent-green);
+        }
+
+        .input-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .input-wrapper {
+            position: relative;
         }
 
         /* Player Tags */
@@ -366,15 +326,15 @@
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-top: 8px;
+            margin-top: 10px;
         }
 
         .player-tag {
             background: var(--bg-input);
             color: var(--text-primary);
-            padding: 8px 14px;
+            padding: 8px 12px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -383,11 +343,12 @@
 
         .player-tag .remove {
             cursor: pointer;
-            opacity: 0.7;
+            opacity: 0.6;
             font-size: 1rem;
+            line-height: 1;
         }
 
-        .player-tag .remove:hover {
+        .player-tag .remove:active {
             opacity: 1;
         }
 
@@ -402,22 +363,23 @@
         }
 
         .add-player-row button {
-            padding: 14px 20px;
+            padding: 12px 18px;
             background: var(--accent-green);
             color: var(--bg-primary);
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-weight: 700;
             font-size: 1.1rem;
             cursor: pointer;
+            font-family: inherit;
         }
 
         /* Buttons */
         .btn {
-            padding: 16px 24px;
+            padding: 14px 20px;
             border: none;
             border-radius: 12px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
             display: flex;
@@ -426,7 +388,7 @@
             gap: 8px;
             width: 100%;
             font-family: inherit;
-            transition: transform 0.2s, opacity 0.2s;
+            transition: transform 0.1s, opacity 0.2s;
         }
 
         .btn:active {
@@ -434,7 +396,7 @@
         }
 
         .btn:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
         }
 
@@ -466,12 +428,12 @@
             background: var(--bg-secondary);
             color: var(--text-primary);
             border: 1px solid var(--border-color);
-            padding: 10px 16px;
+            padding: 10px 14px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             cursor: pointer;
             font-family: inherit;
-            transition: all 0.2s;
+            transition: all 0.15s;
         }
 
         .quick-add-btn:active {
@@ -480,9 +442,39 @@
             border-color: var(--accent-green);
         }
 
+        /* Summary Stats */
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .stat-box {
+            background: var(--bg-secondary);
+            padding: 14px 10px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-box .number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .stat-box .label {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         /* Player List */
         .player-list {
-            margin-top: 8px;
+            margin-top: 12px;
         }
 
         .player-item {
@@ -491,85 +483,84 @@
             padding: 14px;
             background: var(--bg-secondary);
             border-radius: 12px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .player-item:active {
+            border-color: var(--accent-green);
         }
 
         .player-avatar {
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             background: var(--bg-input);
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 12px;
-            font-size: 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 600;
             border: 2px solid var(--border-color);
+            color: var(--accent-green);
         }
 
         .player-info {
             flex: 1;
+            min-width: 0;
         }
 
         .player-name {
             font-weight: 600;
+            font-size: 0.95rem;
             margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .player-status {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--accent-green);
-        }
-
-        .player-status.pending {
-            color: var(--accent-orange);
         }
 
         .player-amount {
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            margin-left: 8px;
         }
 
         .player-check {
-            width: 28px;
-            height: 28px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             background: var(--accent-green);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-left: 12px;
+            margin-left: 10px;
+            font-size: 0.8rem;
+            color: var(--bg-primary);
         }
 
-        /* Summary Stats */
-        .summary-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .stat-box {
-            background: var(--bg-secondary);
-            padding: 16px;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid var(--border-color);
-        }
-
-        .stat-box .number {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--accent-green);
-        }
-
-        .stat-box .label {
+        /* Badge */
+        .badge {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+            padding: 4px 10px;
+            border-radius: 6px;
             font-size: 0.7rem;
-            color: var(--text-secondary);
-            margin-top: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
         }
 
         /* Bottom Bar */
@@ -583,6 +574,7 @@
             padding-bottom: calc(16px + env(safe-area-inset-bottom));
             border-top: 1px solid var(--border-color);
             display: none;
+            z-index: 100;
         }
 
         .bottom-bar.show {
@@ -597,14 +589,14 @@
         }
 
         .cost-info .label {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .cost-info .amount {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
         }
 
@@ -612,34 +604,12 @@
             color: var(--accent-green);
         }
 
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--bg-card);
-            color: var(--text-primary);
-            padding: 14px 24px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 1000;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .toast.show {
-            opacity: 1;
-        }
-
         /* History Item */
         .history-item {
             background: var(--bg-secondary);
             border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
             cursor: pointer;
             border: 1px solid var(--border-color);
             transition: border-color 0.2s;
@@ -658,17 +628,18 @@
 
         .history-date {
             font-weight: 600;
+            font-size: 0.95rem;
         }
 
         .history-time {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
         }
 
         .history-amount {
             font-weight: 700;
             color: var(--accent-green);
-            font-size: 1.1rem;
+            font-size: 1.05rem;
         }
 
         .history-location {
@@ -676,12 +647,12 @@
             align-items: center;
             gap: 6px;
             color: var(--text-secondary);
-            font-size: 0.85rem;
-            margin-bottom: 8px;
+            font-size: 0.8rem;
+            margin-bottom: 6px;
         }
 
         .history-meta {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
         }
 
@@ -698,26 +669,30 @@
             opacity: 0.5;
         }
 
+        .empty-state p {
+            font-size: 0.9rem;
+        }
+
         /* Settings */
         .settings-input {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .settings-input label {
             display: block;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-secondary);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 500;
         }
 
         .settings-input input {
             width: 100%;
-            padding: 14px 16px;
+            padding: 12px 14px;
             background: var(--bg-input);
             border: 1.5px solid var(--border-color);
-            border-radius: 12px;
-            font-size: 16px;
+            border-radius: 10px;
+            font-size: 14px;
             color: var(--text-primary);
             font-family: inherit;
         }
@@ -732,23 +707,24 @@
             border-radius: 10px;
             margin-top: 12px;
             font-size: 0.85rem;
+            display: none;
         }
 
         .settings-status.success {
-            background: rgba(34, 197, 94, 0.2);
+            display: block;
+            background: rgba(34, 197, 94, 0.15);
             color: var(--success);
+            border: 1px solid rgba(34, 197, 94, 0.3);
         }
 
         .settings-status.error {
-            background: rgba(239, 68, 68, 0.2);
+            display: block;
+            background: rgba(239, 68, 68, 0.15);
             color: var(--error);
+            border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
         /* Location Suggestions */
-        .input-wrapper {
-            position: relative;
-        }
-
         .location-suggestions {
             position: absolute;
             top: 100%;
@@ -757,16 +733,17 @@
             background: var(--bg-card);
             border: 1.5px solid var(--border-color);
             border-top: none;
-            border-radius: 0 0 12px 12px;
+            border-radius: 0 0 10px 10px;
             max-height: 150px;
             overflow-y: auto;
-            z-index: 100;
+            z-index: 50;
             display: none;
         }
 
         .location-suggestion {
-            padding: 14px 16px;
+            padding: 12px 14px;
             cursor: pointer;
+            font-size: 0.9rem;
             border-bottom: 1px solid var(--border-color);
         }
 
@@ -778,97 +755,59 @@
             background: var(--bg-secondary);
         }
 
-        /* Toggle Switch */
-        .toggle-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            pointer-events: none;
         }
 
-        .toggle {
-            width: 52px;
-            height: 28px;
-            background: var(--bg-input);
-            border-radius: 14px;
-            position: relative;
-            cursor: pointer;
-            border: 2px solid var(--border-color);
-            transition: all 0.3s;
-        }
-
-        .toggle.active {
-            background: var(--accent-green);
-            border-color: var(--accent-green);
-        }
-
-        .toggle::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s;
-        }
-
-        .toggle.active::after {
-            transform: translateX(24px);
-        }
-
-        /* Badge */
-        .badge {
-            background: var(--accent-green);
-            color: var(--bg-primary);
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
+        .toast.show {
+            opacity: 1;
         }
 
         /* Spinner */
         .spinner {
             display: inline-block;
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             border: 2px solid var(--bg-primary);
             border-radius: 50%;
             border-top-color: transparent;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        /* Share Button */
-        .share-btn {
-            background: var(--accent-green);
-            color: var(--bg-primary);
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 12px;
-        }
-
         /* Responsive */
         @media (max-width: 380px) {
             .stat-box .number {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
             .input-row {
                 grid-template-columns: 1fr;
             }
             .tab {
-                padding: 10px 12px;
-                font-size: 0.8rem;
+                padding: 10px 10px;
+                font-size: 0.75rem;
+                min-width: 60px;
+            }
+            .session-title {
+                font-size: 1.3rem;
             }
         }
     </style>
@@ -876,7 +815,7 @@
 <body>
     <!-- App Header -->
     <header class="app-header">
-        <button class="back-btn" onclick="history.back()">‹</button>
+        <button class="back-btn" onclick="window.location.reload()">‹</button>
         <h1>Weekly Game RSVP</h1>
         <div class="connection-badge">
             <span class="status-dot" id="status-dot"></span>
@@ -887,7 +826,7 @@
     <!-- Hero Section -->
     <div class="hero-section">
         <div class="hero-image">
-            <div class="hero-placeholder">🏸</div>
+            <span class="hero-emoji">🏸</span>
         </div>
     </div>
 
@@ -906,40 +845,31 @@
         <button class="tab active" id="tab-input" onclick="showTab('input', this)">📝 Input</button>
         <button class="tab" id="tab-results" onclick="showTab('results', this)">💰 Results</button>
         <button class="tab" id="tab-history" onclick="showTab('history', this)">📜 History</button>
-        <button class="tab" id="tab-settings" onclick="showTab('settings', this)">⚙️ Settings</button>
+        <button class="tab" id="tab-settings" onclick="showTab('settings', this)">⚙️</button>
     </div>
 
     <!-- INPUT TAB -->
     <div id="input-tab" class="tab-content active">
         <div class="container">
-            <!-- Attendance Card -->
             <div class="card">
-                <h2>Your Session</h2>
-                <p class="card-subtitle">Add session details and players</p>
+                <h2>📋 Session Details</h2>
+                <p class="card-subtitle">Add court info and players who attended</p>
                 
-                <div id="sessions-container">
-                    <!-- Sessions will be added here dynamically -->
-                </div>
+                <div id="sessions-container"></div>
                 
-                <button class="btn btn-outline" onclick="addSession()" style="margin-top: 12px;">
+                <button class="btn btn-outline" onclick="addSession()" style="margin-top: 8px;">
                     ➕ Add Another Session
                 </button>
             </div>
 
-            <!-- Quick Add Players Card -->
             <div class="card">
-                <div class="card-header">
-                    <div>
-                        <h2>Quick Add Players</h2>
-                        <p class="card-subtitle">Tap to add to current session</p>
-                    </div>
-                </div>
+                <h2>⚡ Quick Add Players</h2>
+                <p class="card-subtitle">Tap to add to current session</p>
                 <div id="quick-add-players" class="quick-add">
-                    <span style="color: var(--text-muted); font-size: 0.85rem;">Configure Supabase in Settings ⚙️</span>
+                    <span style="color: var(--text-muted); font-size: 0.85rem;">Loading players...</span>
                 </div>
             </div>
 
-            <!-- Calculate Button -->
             <button class="btn btn-primary" onclick="calculateCosts()" id="calculate-btn">
                 🧮 Calculate Costs
             </button>
@@ -953,7 +883,6 @@
     <!-- RESULTS TAB -->
     <div id="results-tab" class="tab-content">
         <div class="container">
-            <!-- Summary Card -->
             <div class="card">
                 <h2>📊 Summary</h2>
                 <div class="summary-stats">
@@ -972,21 +901,20 @@
                 </div>
             </div>
 
-            <!-- Confirmed Players Card -->
             <div class="card">
                 <div class="card-header">
-                    <h2>Confirmed Players</h2>
+                    <h2>👥 Player Breakdown</h2>
                     <span class="badge" id="player-count-badge">0 Players</span>
                 </div>
+                <p class="card-subtitle">Tap a player to share their cost details</p>
                 <div id="results-container" class="player-list">
                     <div class="empty-state">
                         <div class="icon">📊</div>
-                        <p>Add sessions and players, then calculate to see results</p>
+                        <p>Calculate costs to see results</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Share All Button -->
             <button class="btn btn-primary" onclick="shareAllResults()">
                 📤 Share All Results
             </button>
@@ -998,7 +926,7 @@
         <div class="container">
             <div class="card">
                 <h2>📜 Calculation History</h2>
-                <p class="card-subtitle">Tap an entry to view details</p>
+                <p class="card-subtitle">Tap to view details</p>
                 <div id="history-container" style="margin-top: 16px;">
                     <div class="empty-state">
                         <div class="icon">📜</div>
@@ -1012,10 +940,9 @@
     <!-- SETTINGS TAB -->
     <div id="settings-tab" class="tab-content">
         <div class="container">
-            <!-- Supabase Config Card -->
             <div class="card">
-                <h2>⚙️ Supabase Configuration</h2>
-                <p class="card-subtitle">Enter your credentials to enable cloud sync</p>
+                <h2>🔗 Database Connection</h2>
+                <p class="card-subtitle">Connect to Supabase for cloud sync</p>
                 
                 <div class="settings-input" style="margin-top: 16px;">
                     <label>Supabase Project URL</label>
@@ -1024,43 +951,40 @@
                 
                 <div class="settings-input">
                     <label>Supabase Anon Key</label>
-                    <input type="text" id="supabase-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6...">
+                    <input type="text" id="supabase-key" placeholder="eyJhbGciOiJIUzI1NiIs...">
                 </div>
                 
                 <button class="btn btn-primary" onclick="saveSupabaseConfig()">
-                    💾 Save & Connect
+                    🔌 Connect
                 </button>
                 
-                <div id="settings-status" class="settings-status" style="display: none;"></div>
+                <div id="settings-status" class="settings-status"></div>
             </div>
 
-            <!-- Saved Locations Card -->
             <div class="card">
                 <h2>📍 Saved Locations</h2>
                 <div id="saved-locations" style="margin-top: 12px;">
-                    <span style="color: var(--text-muted); font-size: 0.85rem;">Connect to Supabase to see locations</span>
+                    <span style="color: var(--text-muted); font-size: 0.85rem;">Connect to see locations</span>
                 </div>
             </div>
 
-            <!-- Manage Players Card -->
             <div class="card">
                 <h2>👥 Manage Players</h2>
+                <p class="card-subtitle">Add players to the database</p>
                 <div class="input-group" style="margin-top: 12px;">
-                    <label>Add New Player</label>
                     <div class="add-player-row">
                         <input type="text" id="new-player-name" placeholder="Enter player name...">
                         <button onclick="addNewPlayerToDatabase()">+</button>
                     </div>
                 </div>
                 <div id="all-players-list" style="margin-top: 12px;">
-                    <span style="color: var(--text-muted); font-size: 0.85rem;">Connect to Supabase to manage players</span>
+                    <span style="color: var(--text-muted); font-size: 0.85rem;">Connect to manage players</span>
                 </div>
             </div>
 
-            <!-- Reset Card -->
             <div class="card">
-                <h2>🔄 Reset App</h2>
-                <button class="btn btn-secondary" onclick="resetApp()" style="background: rgba(239, 68, 68, 0.2); color: var(--error); border-color: var(--error);">
+                <h2>🔄 Reset</h2>
+                <button class="btn btn-secondary" onclick="resetApp()" style="background: rgba(239, 68, 68, 0.15); color: var(--error); border-color: var(--error);">
                     🗑️ Clear All Local Data
                 </button>
             </div>
@@ -1072,7 +996,7 @@
         <div class="bottom-bar-content">
             <div class="cost-info">
                 <div class="label">ESTIMATED COST</div>
-                <div class="amount" id="bottom-per-person">AED 0 <span style="font-size: 0.9rem; font-weight: 400;">/ person</span></div>
+                <div class="amount" id="bottom-per-person">AED 0 <span style="font-size: 0.85rem; font-weight: 400;">/ person</span></div>
             </div>
             <div class="cost-info" style="text-align: right;">
                 <div class="label">POOL TOTAL</div>
@@ -1080,45 +1004,44 @@
             </div>
         </div>
         <button class="btn btn-primary" onclick="saveToDatabase()" id="bottom-save-btn">
-            Confirm RSVP & Save
+            ✓ Confirm & Save
         </button>
     </div>
 
     <!-- Toast -->
-    <div class="toast" id="toast">Message copied!</div>
+    <div class="toast" id="toast">Message</div>
 
     <script>
         // ============ CONFIGURATION ============
-        let supabase = null;
-        let sessionCounter = 0;
-        const currency = 'AED';
-        let allPlayers = [];
-        let savedLocations = [];
-        let calculationResults = null;
-        let historyData = [];
+        var supabase = null;
+        var sessionCounter = 0;
+        var currency = 'AED';
+        var allPlayers = [];
+        var savedLocations = [];
+        var calculationResults = null;
+        var historyData = [];
 
         // ============ INITIALIZATION ============
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('App initializing...');
+            console.log('🏸 Badminton Cost Splitter initializing...');
             loadSupabaseConfig();
             addSession();
             updateSessionTitle();
         });
 
-        // ============ UPDATE SESSION TITLE ============
+        // ============ SESSION TITLE UPDATE ============
         function updateSessionTitle() {
             var sessions = document.querySelectorAll('.session-container');
             if (sessions.length > 0) {
                 var firstSession = sessions[0];
                 var sessionNum = firstSession.id.split('-')[1];
                 var dateInput = document.getElementById('date-' + sessionNum);
-                var locationInput = document.getElementById('location-' + sessionNum);
                 
                 if (dateInput && dateInput.value) {
-                    var date = new Date(dateInput.value);
+                    var date = new Date(dateInput.value + 'T00:00:00');
                     var options = { weekday: 'long', month: 'short', day: 'numeric' };
                     var formattedDate = date.toLocaleDateString('en-US', options);
-                    document.getElementById('current-session-date').textContent = formattedDate + ' • 10:00 AM';
+                    document.getElementById('current-session-date').textContent = formattedDate;
                     
                     var dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
                     document.getElementById('current-session-title').textContent = dayName + ' Badminton Session';
@@ -1128,8 +1051,6 @@
 
         // ============ TAB NAVIGATION ============
         function showTab(tabName, clickedTab) {
-            console.log('Switching to tab:', tabName);
-            
             document.querySelectorAll('.tab').forEach(function(tab) {
                 tab.classList.remove('active');
             });
@@ -1141,12 +1062,13 @@
             if (clickedTab) {
                 clickedTab.classList.add('active');
             } else {
-                document.getElementById('tab-' + tabName).classList.add('active');
+                var tabEl = document.getElementById('tab-' + tabName);
+                if (tabEl) tabEl.classList.add('active');
             }
             
-            document.getElementById(tabName + '-tab').classList.add('active');
+            var contentEl = document.getElementById(tabName + '-tab');
+            if (contentEl) contentEl.classList.add('active');
             
-            // Show/hide bottom bar
             var bottomBar = document.getElementById('bottom-bar');
             if (tabName === 'results' && calculationResults) {
                 bottomBar.classList.add('show');
@@ -1165,7 +1087,9 @@
                 document.getElementById('supabase-key').value = key;
                 initializeSupabase(url, key);
             } else {
-                updateConnectionStatus('disconnected', 'Not configured');
+                updateConnectionStatus('disconnected', 'Not connected');
+                document.getElementById('quick-add-players').innerHTML = 
+                    '<span style="color: var(--text-muted); font-size: 0.85rem;">Go to Settings ⚙️ to connect database</span>';
             }
         }
 
@@ -1187,37 +1111,32 @@
         async function initializeSupabase(url, key) {
             try {
                 updateConnectionStatus('connecting', 'Connecting...');
-                console.log('Connecting to Supabase...');
                 
                 supabase = window.supabase.createClient(url, key);
                 
-                var result = await supabase.from('players').select('*').limit(1);
+                var result = await supabase.from('players').select('id').limit(1);
                 
                 if (result.error) {
-                    console.error('Supabase error:', result.error);
                     throw result.error;
                 }
                 
-                console.log('Connected to Supabase!');
                 updateConnectionStatus('connected', 'Connected');
                 
                 var statusEl = document.getElementById('settings-status');
                 statusEl.textContent = '✓ Connected successfully!';
                 statusEl.className = 'settings-status success';
-                statusEl.style.display = 'block';
                 
                 await loadPlayers();
                 await loadLocations();
                 await loadHistory();
                 
             } catch (error) {
-                console.error('Supabase connection error:', error);
+                console.error('Connection error:', error);
                 updateConnectionStatus('error', 'Failed');
                 
                 var statusEl = document.getElementById('settings-status');
-                statusEl.textContent = '✗ Connection failed: ' + error.message;
+                statusEl.textContent = '✗ ' + (error.message || 'Connection failed');
                 statusEl.className = 'settings-status error';
-                statusEl.style.display = 'block';
             }
         }
 
@@ -1237,22 +1156,20 @@
             if (!supabase) return;
             
             try {
-                console.log('Loading players...');
                 var result = await supabase
                     .from('players')
                     .select('*')
+                    .eq('is_active', true)
                     .order('name');
                 
                 if (result.error) throw result.error;
                 
                 allPlayers = result.data || [];
-                console.log('Loaded players:', allPlayers.length);
                 updateQuickAddButtons();
                 updatePlayersListInSettings();
                 
             } catch (error) {
                 console.error('Error loading players:', error);
-                showToast('Error loading players');
             }
         }
 
@@ -1260,7 +1177,7 @@
             var container = document.getElementById('quick-add-players');
             
             if (allPlayers.length === 0) {
-                container.innerHTML = '<span style="color: var(--text-muted); font-size: 0.85rem;">No players yet. Add some in Settings ⚙️</span>';
+                container.innerHTML = '<span style="color: var(--text-muted); font-size: 0.85rem;">No players yet. Add in Settings ⚙️</span>';
                 return;
             }
             
@@ -1300,7 +1217,7 @@
 
         async function addNewPlayerToDatabase() {
             if (!supabase) {
-                showToast('Please configure Supabase first');
+                showToast('Connect to database first');
                 return;
             }
             
@@ -1308,7 +1225,7 @@
             var name = input.value.trim();
             
             if (!name) {
-                showToast('Please enter a player name');
+                showToast('Enter a player name');
                 return;
             }
             
@@ -1332,7 +1249,7 @@
                 showToast('Player added!');
                 
             } catch (error) {
-                console.error('Error adding player:', error);
+                console.error('Error:', error);
                 showToast('Error adding player');
             }
         }
@@ -1343,17 +1260,17 @@
             try {
                 var result = await supabase
                     .from('players')
-                    .delete()
+                    .update({ is_active: false })
                     .eq('id', playerId);
                 
                 if (result.error) throw result.error;
                 
                 await loadPlayers();
-                showToast('Player deleted');
+                showToast('Player removed');
                 
             } catch (error) {
-                console.error('Error deleting player:', error);
-                showToast('Error deleting player');
+                console.error('Error:', error);
+                showToast('Error removing player');
             }
         }
 
@@ -1365,7 +1282,8 @@
                 var result = await supabase
                     .from('sessions')
                     .select('court_location')
-                    .order('created_at', { ascending: false });
+                    .order('created_at', { ascending: false })
+                    .limit(50);
                 
                 if (result.error) throw result.error;
                 
@@ -1405,68 +1323,63 @@
             container.appendChild(tagsDiv);
         }
 
-        // ============ SESSIONS (UI) ============
+        // ============ SESSIONS ============
         function addSession() {
             sessionCounter++;
             var container = document.getElementById('sessions-container');
             
             var today = new Date().toISOString().split('T')[0];
-            var sessionNum = sessionCounter;
+            var num = sessionCounter;
             
-            var sessionDiv = document.createElement('div');
-            sessionDiv.className = 'session-container';
-            sessionDiv.id = 'session-' + sessionNum;
-            sessionDiv.innerHTML = 
+            var div = document.createElement('div');
+            div.className = 'session-container';
+            div.id = 'session-' + num;
+            div.innerHTML = 
                 '<div class="session-header">' +
-                    '<h3>📅 Session ' + sessionNum + '</h3>' +
-                    '<button class="delete-btn" onclick="deleteSession(' + sessionNum + ')">🗑️ Remove</button>' +
+                    '<h3>📅 Session ' + num + '</h3>' +
+                    (num > 1 ? '<button class="delete-btn" onclick="deleteSession(' + num + ')">🗑️</button>' : '') +
                 '</div>' +
-                
                 '<div class="input-row">' +
                     '<div class="input-group">' +
                         '<label>Date</label>' +
-                        '<input type="date" id="date-' + sessionNum + '" value="' + today + '" onchange="updateSessionTitle()">' +
+                        '<input type="date" id="date-' + num + '" value="' + today + '" onchange="updateSessionTitle()">' +
                     '</div>' +
                     '<div class="input-group">' +
-                        '<label>Court Cost (AED)</label>' +
-                        '<input type="number" id="cost-' + sessionNum + '" placeholder="0.00" inputmode="decimal" step="0.01">' +
+                        '<label>Cost (AED)</label>' +
+                        '<input type="number" id="cost-' + num + '" placeholder="0.00" inputmode="decimal" step="0.01">' +
                     '</div>' +
                 '</div>' +
-                
                 '<div class="input-group">' +
-                    '<label>📍 Court Location</label>' +
+                    '<label>📍 Location</label>' +
                     '<div class="input-wrapper">' +
-                        '<input type="text" id="location-' + sessionNum + '" placeholder="Enter court location..." ' +
-                               'onfocus="showLocationSuggestions(' + sessionNum + ')" ' +
-                               'onblur="hideLocationSuggestions(' + sessionNum + ')" ' +
-                               'oninput="filterLocationSuggestions(' + sessionNum + ')">' +
-                        '<div class="location-suggestions" id="location-suggestions-' + sessionNum + '"></div>' +
+                        '<input type="text" id="location-' + num + '" placeholder="Court location..." ' +
+                               'onfocus="showLocationSuggestions(' + num + ')" ' +
+                               'onblur="hideLocationSuggestions(' + num + ')" ' +
+                               'oninput="filterLocationSuggestions(' + num + ')">' +
+                        '<div class="location-suggestions" id="location-suggestions-' + num + '"></div>' +
                     '</div>' +
                 '</div>' +
-                
                 '<div class="input-group">' +
                     '<label>👥 Players</label>' +
                     '<div class="add-player-row">' +
-                        '<input type="text" id="player-input-' + sessionNum + '" placeholder="Add player name..." ' +
-                               'onkeypress="handlePlayerInput(event, ' + sessionNum + ')">' +
-                        '<button onclick="addPlayerToSession(' + sessionNum + ')">+</button>' +
+                        '<input type="text" id="player-input-' + num + '" placeholder="Add player..." ' +
+                               'onkeypress="handlePlayerInput(event, ' + num + ')">' +
+                        '<button onclick="addPlayerToSession(' + num + ')">+</button>' +
                     '</div>' +
-                    '<div class="player-tags" id="players-' + sessionNum + '"></div>' +
+                    '<div class="player-tags" id="players-' + num + '"></div>' +
                 '</div>';
             
-            container.appendChild(sessionDiv);
+            container.appendChild(div);
             updateSessionTitle();
         }
 
-        function deleteSession(sessionNum) {
-            var sessionDiv = document.getElementById('session-' + sessionNum);
-            if (sessionDiv) {
-                sessionDiv.remove();
-            }
+        function deleteSession(num) {
+            var el = document.getElementById('session-' + num);
+            if (el) el.remove();
         }
 
-        function showLocationSuggestions(sessionNum) {
-            var container = document.getElementById('location-suggestions-' + sessionNum);
+        function showLocationSuggestions(num) {
+            var container = document.getElementById('location-suggestions-' + num);
             if (savedLocations.length === 0) return;
             
             container.innerHTML = '';
@@ -1474,30 +1387,28 @@
                 var div = document.createElement('div');
                 div.className = 'location-suggestion';
                 div.textContent = loc;
-                div.onmousedown = function() {
-                    selectLocation(sessionNum, loc);
-                };
+                div.onmousedown = function() { selectLocation(num, loc); };
                 container.appendChild(div);
             });
             container.style.display = 'block';
         }
 
-        function hideLocationSuggestions(sessionNum) {
+        function hideLocationSuggestions(num) {
             setTimeout(function() {
-                var el = document.getElementById('location-suggestions-' + sessionNum);
+                var el = document.getElementById('location-suggestions-' + num);
                 if (el) el.style.display = 'none';
             }, 200);
         }
 
-        function filterLocationSuggestions(sessionNum) {
-            var input = document.getElementById('location-' + sessionNum).value.toLowerCase();
-            var container = document.getElementById('location-suggestions-' + sessionNum);
+        function filterLocationSuggestions(num) {
+            var input = document.getElementById('location-' + num).value.toLowerCase();
+            var container = document.getElementById('location-suggestions-' + num);
             
             var filtered = savedLocations.filter(function(loc) {
                 return loc.toLowerCase().indexOf(input) !== -1;
             });
             
-            if (filtered.length === 0) {
+            if (filtered.length === 0 || !input) {
                 container.style.display = 'none';
                 return;
             }
@@ -1507,38 +1418,36 @@
                 var div = document.createElement('div');
                 div.className = 'location-suggestion';
                 div.textContent = loc;
-                div.onmousedown = function() {
-                    selectLocation(sessionNum, loc);
-                };
+                div.onmousedown = function() { selectLocation(num, loc); };
                 container.appendChild(div);
             });
             container.style.display = 'block';
         }
 
-        function selectLocation(sessionNum, location) {
-            document.getElementById('location-' + sessionNum).value = location;
+        function selectLocation(num, location) {
+            document.getElementById('location-' + num).value = location;
         }
 
-        // ============ PLAYER MANAGEMENT IN SESSION ============
-        function handlePlayerInput(event, sessionNum) {
+        // ============ PLAYER IN SESSION ============
+        function handlePlayerInput(event, num) {
             if (event.key === 'Enter') {
                 event.preventDefault();
-                addPlayerToSession(sessionNum);
+                addPlayerToSession(num);
             }
         }
 
-        function addPlayerToSession(sessionNum, playerId, playerName) {
-            var input = document.getElementById('player-input-' + sessionNum);
+        function addPlayerToSession(num, playerId, playerName) {
+            var input = document.getElementById('player-input-' + num);
             var name = playerName || (input ? input.value.trim() : '');
             
             if (!name) return;
             
-            var container = document.getElementById('players-' + sessionNum);
+            var container = document.getElementById('players-' + num);
+            var existing = container.querySelectorAll('.player-tag');
             
-            var existingTags = container.querySelectorAll('.player-tag');
-            for (var i = 0; i < existingTags.length; i++) {
-                if (existingTags[i].dataset.name.toLowerCase() === name.toLowerCase()) {
-                    showToast('Player already added!');
+            for (var i = 0; i < existing.length; i++) {
+                if (existing[i].dataset.name.toLowerCase() === name.toLowerCase()) {
+                    showToast('Already added!');
                     if (input) input.value = '';
                     return;
                 }
@@ -1566,36 +1475,34 @@
         function addPlayerToCurrentSession(playerId, playerName) {
             var sessions = document.querySelectorAll('.session-container');
             if (sessions.length > 0) {
-                var lastSession = sessions[sessions.length - 1];
-                var sessionNum = lastSession.id.split('-')[1];
-                addPlayerToSession(parseInt(sessionNum), playerId, playerName);
+                var last = sessions[sessions.length - 1];
+                var num = parseInt(last.id.split('-')[1]);
+                addPlayerToSession(num, playerId, playerName);
             }
         }
 
         // ============ CALCULATIONS ============
         function calculateCosts() {
             var sessions = [];
-            var sessionContainers = document.querySelectorAll('.session-container');
+            var containers = document.querySelectorAll('.session-container');
             
-            sessionContainers.forEach(function(container, index) {
-                var sessionNum = container.id.split('-')[1];
-                var date = document.getElementById('date-' + sessionNum).value;
-                var cost = parseFloat(document.getElementById('cost-' + sessionNum).value) || 0;
-                var location = document.getElementById('location-' + sessionNum).value.trim();
-                var playerTags = container.querySelectorAll('#players-' + sessionNum + ' .player-tag');
+            containers.forEach(function(container, index) {
+                var num = container.id.split('-')[1];
+                var date = document.getElementById('date-' + num).value;
+                var cost = parseFloat(document.getElementById('cost-' + num).value) || 0;
+                var location = document.getElementById('location-' + num).value.trim();
+                var tags = container.querySelectorAll('#players-' + num + ' .player-tag');
                 var players = [];
-                playerTags.forEach(function(tag) {
-                    players.push({
-                        id: tag.dataset.id,
-                        name: tag.dataset.name
-                    });
+                
+                tags.forEach(function(tag) {
+                    players.push({ id: tag.dataset.id, name: tag.dataset.name });
                 });
                 
                 if (cost > 0 && players.length > 0) {
                     sessions.push({
                         sessionNum: index + 1,
                         date: date,
-                        location: location || 'Unknown Location',
+                        location: location || 'Unknown',
                         cost: cost,
                         players: players,
                         perPlayer: cost / players.length
@@ -1604,7 +1511,7 @@
             });
 
             if (sessions.length === 0) {
-                showToast('Please add at least one session with cost and players');
+                showToast('Add cost and players first');
                 return;
             }
 
@@ -1648,6 +1555,7 @@
             }
             
             showTab('results', document.getElementById('tab-results'));
+            showToast('Calculation complete!');
         }
 
         function displayResults(results) {
@@ -1656,28 +1564,24 @@
             document.getElementById('total-sessions').textContent = results.totalSessions;
             document.getElementById('player-count-badge').textContent = results.totalPlayers + ' Players';
 
-            // Update bottom bar
-            var avgPerPerson = results.totalCost / results.totalPlayers;
-            document.getElementById('bottom-per-person').innerHTML = currency + ' ' + avgPerPerson.toFixed(2) + ' <span style="font-size: 0.9rem; font-weight: 400;">/ person</span>';
+            var avg = results.totalCost / results.totalPlayers;
+            document.getElementById('bottom-per-person').innerHTML = currency + ' ' + avg.toFixed(2) + ' <span style="font-size: 0.85rem; font-weight: 400;">/ person</span>';
             document.getElementById('bottom-total').textContent = currency + ' ' + results.totalCost.toFixed(2);
             document.getElementById('bottom-bar').classList.add('show');
 
             var container = document.getElementById('results-container');
             container.innerHTML = '';
 
-            var sortedPlayers = Object.values(results.playerTotals)
-                .sort(function(a, b) { return b.total - a.total; });
+            var sorted = Object.values(results.playerTotals).sort(function(a, b) { 
+                return b.total - a.total; 
+            });
 
-            sortedPlayers.forEach(function(player, index) {
-                var div = document.createElement('div');
-                div.className = 'player-item';
-                
+            sorted.forEach(function(player) {
                 var initials = player.name.split(' ').map(function(n) { return n[0]; }).join('').toUpperCase().substring(0, 2);
                 
-                var breakdownText = player.breakdown.map(function(b) {
-                    return b.date + ' @ ' + b.location + ': ' + currency + ' ' + b.amount.toFixed(2);
-                }).join('\\n');
-
+                var div = document.createElement('div');
+                div.className = 'player-item';
+                div.onclick = function() { sharePlayerResult(player.name); };
                 div.innerHTML = 
                     '<div class="player-avatar">' + initials + '</div>' +
                     '<div class="player-info">' +
@@ -1687,10 +1591,6 @@
                     '<div class="player-amount">' + currency + ' ' + player.total.toFixed(2) + '</div>' +
                     '<div class="player-check">✓</div>';
                 
-                div.onclick = function() {
-                    sharePlayerResult(player.name);
-                };
-                
                 container.appendChild(div);
             });
         }
@@ -1698,7 +1598,7 @@
         // ============ SAVE TO DATABASE ============
         async function saveToDatabase() {
             if (!supabase || !calculationResults) {
-                showToast('Cannot save - not connected or no results');
+                showToast('Cannot save');
                 return;
             }
 
@@ -1733,22 +1633,22 @@
                         var playerId = player.id;
                         
                         if (!playerId) {
-                            var existingResult = await supabase
+                            var findResult = await supabase
                                 .from('players')
                                 .select('id')
                                 .ilike('name', player.name)
                                 .single();
 
-                            if (existingResult.data) {
-                                playerId = existingResult.data.id;
+                            if (findResult.data) {
+                                playerId = findResult.data.id;
                             } else {
-                                var newPlayerResult = await supabase
+                                var newResult = await supabase
                                     .from('players')
                                     .insert([{ name: player.name }])
                                     .select();
                                 
-                                if (newPlayerResult.data && newPlayerResult.data[0]) {
-                                    playerId = newPlayerResult.data[0].id;
+                                if (newResult.data && newResult.data[0]) {
+                                    playerId = newResult.data[0].id;
                                 }
                             }
                         }
@@ -1784,10 +1684,10 @@
                 await loadHistory();
 
             } catch (error) {
-                console.error('Error saving to database:', error);
-                showToast('Error saving: ' + error.message);
+                console.error('Save error:', error);
+                showToast('Error: ' + error.message);
                 btn.innerHTML = '💾 Save to Database';
-                bottomBtn.innerHTML = 'Confirm RSVP & Save';
+                bottomBtn.innerHTML = '✓ Confirm & Save';
                 btn.disabled = false;
                 bottomBtn.disabled = false;
             }
@@ -1797,10 +1697,7 @@
         async function loadHistory() {
             if (!supabase) {
                 document.getElementById('history-container').innerHTML = 
-                    '<div class="empty-state">' +
-                        '<div class="icon">⚙️</div>' +
-                        '<p>Configure Supabase in Settings to see history</p>' +
-                    '</div>';
+                    '<div class="empty-state"><div class="icon">⚙️</div><p>Connect database in Settings</p></div>';
                 return;
             }
             
@@ -1816,34 +1713,31 @@
                 var container = document.getElementById('history-container');
                 
                 if (!result.data || result.data.length === 0) {
-                    container.innerHTML = 
-                        '<div class="empty-state">' +
-                            '<div class="icon">📜</div>' +
-                            '<p>No calculation history yet</p>' +
-                        '</div>';
+                    container.innerHTML = '<div class="empty-state"><div class="icon">📜</div><p>No history yet</p></div>';
                     return;
                 }
                 
                 historyData = result.data;
-                
                 container.innerHTML = '';
+                
                 result.data.forEach(function(item, index) {
                     var date = new Date(item.calculation_date);
                     var locations = 'N/A';
+                    
                     if (item.breakdown && item.breakdown.sessions) {
-                        var uniqueLocs = [];
+                        var locs = [];
                         item.breakdown.sessions.forEach(function(s) {
-                            if (s.location && uniqueLocs.indexOf(s.location) === -1) {
-                                uniqueLocs.push(s.location);
+                            if (s.location && locs.indexOf(s.location) === -1) {
+                                locs.push(s.location);
                             }
                         });
-                        locations = uniqueLocs.join(', ');
+                        locations = locs.join(', ');
                     }
                     
-                    var historyItem = document.createElement('div');
-                    historyItem.className = 'history-item';
-                    historyItem.onclick = function() { viewHistoryDetail(index); };
-                    historyItem.innerHTML = 
+                    var div = document.createElement('div');
+                    div.className = 'history-item';
+                    div.onclick = function() { viewHistoryDetail(index); };
+                    div.innerHTML = 
                         '<div class="history-header">' +
                             '<div>' +
                                 '<div class="history-date">' + date.toLocaleDateString() + '</div>' +
@@ -1853,146 +1747,126 @@
                         '</div>' +
                         '<div class="history-location">📍 ' + locations + '</div>' +
                         '<div class="history-meta">' + item.total_sessions + ' session(s) • ' + item.total_players + ' players</div>';
-                    container.appendChild(historyItem);
+                    
+                    container.appendChild(div);
                 });
                 
             } catch (error) {
-                console.error('Error loading history:', error);
+                console.error('History error:', error);
                 document.getElementById('history-container').innerHTML = 
-                    '<div class="empty-state">' +
-                        '<div class="icon">❌</div>' +
-                        '<p>Error loading history</p>' +
-                    '</div>';
+                    '<div class="empty-state"><div class="icon">❌</div><p>Error loading history</p></div>';
             }
         }
 
         function viewHistoryDetail(index) {
             if (!historyData || !historyData[index]) return;
             
-            var item = historyData[index];
-            calculationResults = item.breakdown;
+            calculationResults = historyData[index].breakdown;
             displayResults(calculationResults);
-            
             document.getElementById('save-btn').style.display = 'none';
-            
             showTab('results', document.getElementById('tab-results'));
         }
 
         // ============ SHARING ============
-        function generatePlayerMessage(playerName) {
-            var data = calculationResults.playerTotals[playerName];
+        function generatePlayerMessage(name) {
+            var data = calculationResults.playerTotals[name];
             if (!data) return '';
             
-            var message = '🏸 Badminton Cost Share 🏸\n\n';
-            message += 'Hi ' + playerName + '! 👋\n\n';
-            message += 'Your total: ' + currency + ' ' + data.total.toFixed(2) + '\n\n';
-            message += '📋 Breakdown:\n';
+            var msg = '🏸 Badminton Cost Share 🏸\n\n';
+            msg += 'Hi ' + name + '! 👋\n\n';
+            msg += 'Your total: ' + currency + ' ' + data.total.toFixed(2) + '\n\n';
+            msg += '📋 Breakdown:\n';
             
             data.breakdown.forEach(function(b) {
-                message += '• ' + b.date + ' @ ' + b.location + '\n';
-                message += '  ' + currency + ' ' + b.amount.toFixed(2) + ' (' + b.players + ' players shared ' + currency + ' ' + b.cost.toFixed(2) + ')\n';
+                msg += '• ' + b.date + ' @ ' + b.location + '\n';
+                msg += '  ' + currency + ' ' + b.amount.toFixed(2) + ' (' + b.players + ' players)\n';
             });
             
-            message += '\nThanks for playing! See you on the court! 🏸';
-            
-            return message;
+            msg += '\nSee you on the court! 🏸';
+            return msg;
         }
 
-        function sharePlayerResult(playerName) {
-            var message = generatePlayerMessage(playerName);
+        function sharePlayerResult(name) {
+            var msg = generatePlayerMessage(name);
             
             if (navigator.share) {
-                navigator.share({
-                    title: 'Badminton Cost Share',
-                    text: message
-                }).catch(function() {
-                    copyToClipboard(message);
+                navigator.share({ title: 'Badminton Cost', text: msg }).catch(function() {
+                    copyToClipboard(msg);
                 });
             } else {
-                copyToClipboard(message);
+                copyToClipboard(msg);
             }
         }
 
         function shareAllResults() {
             if (!calculationResults) return;
             
-            var uniqueLocs = [];
+            var locs = [];
             calculationResults.sessions.forEach(function(s) {
-                if (s.location && uniqueLocs.indexOf(s.location) === -1) {
-                    uniqueLocs.push(s.location);
-                }
+                if (s.location && locs.indexOf(s.location) === -1) locs.push(s.location);
             });
-            var locations = uniqueLocs.join(', ');
             
-            var message = '🏸 Badminton Cost Share - Summary 🏸\n\n';
-            message += '📍 Location(s): ' + locations + '\n';
-            message += '📊 Total Court Cost: ' + currency + ' ' + calculationResults.totalCost.toFixed(2) + '\n';
-            message += '👥 Players: ' + calculationResults.totalPlayers + '\n';
-            message += '📅 Sessions: ' + calculationResults.totalSessions + '\n\n';
-            message += '💰 Individual Amounts:\n';
+            var msg = '🏸 Badminton Cost Summary 🏸\n\n';
+            msg += '📍 ' + locs.join(', ') + '\n';
+            msg += '💰 Total: ' + currency + ' ' + calculationResults.totalCost.toFixed(2) + '\n';
+            msg += '👥 ' + calculationResults.totalPlayers + ' players\n\n';
+            msg += 'Individual amounts:\n';
             
             Object.values(calculationResults.playerTotals)
                 .sort(function(a, b) { return b.total - a.total; })
-                .forEach(function(player) {
-                    message += '• ' + player.name + ': ' + currency + ' ' + player.total.toFixed(2) + '\n';
+                .forEach(function(p) {
+                    msg += '• ' + p.name + ': ' + currency + ' ' + p.total.toFixed(2) + '\n';
                 });
             
-            message += '\nThanks everyone! See you on the court! 🏸';
+            msg += '\nSee you on the court! 🏸';
             
             if (navigator.share) {
-                navigator.share({
-                    title: 'Badminton Cost Share',
-                    text: message
-                }).catch(function() {
-                    copyToClipboard(message);
+                navigator.share({ title: 'Badminton Costs', text: msg }).catch(function() {
+                    copyToClipboard(msg);
                 });
             } else {
-                copyToClipboard(message);
+                copyToClipboard(msg);
             }
         }
 
         function copyToClipboard(text) {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
+            if (navigator.clipboard) {
                 navigator.clipboard.writeText(text).then(function() {
-                    showToast('Message copied!');
+                    showToast('Copied to clipboard!');
                 }).catch(function() {
-                    fallbackCopyToClipboard(text);
+                    fallbackCopy(text);
                 });
             } else {
-                fallbackCopyToClipboard(text);
+                fallbackCopy(text);
             }
         }
 
-        function fallbackCopyToClipboard(text) {
-            var textarea = document.createElement('textarea');
-            textarea.value = text;
-            textarea.style.position = 'fixed';
-            textarea.style.left = '-9999px';
-            document.body.appendChild(textarea);
-            textarea.select();
+        function fallbackCopy(text) {
+            var ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
             try {
                 document.execCommand('copy');
-                showToast('Message copied!');
+                showToast('Copied to clipboard!');
             } catch (e) {
-                showToast('Could not copy message');
+                showToast('Could not copy');
             }
-            document.body.removeChild(textarea);
+            document.body.removeChild(ta);
         }
 
         function showToast(message) {
             var toast = document.getElementById('toast');
             toast.textContent = message;
             toast.classList.add('show');
-            setTimeout(function() {
-                toast.classList.remove('show');
-            }, 3000);
+            setTimeout(function() { toast.classList.remove('show'); }, 2500);
         }
 
-        // ============ RESET APP ============
         function resetApp() {
-            if (confirm('This will clear all local settings. Continue?')) {
-                localStorage.removeItem('supabase-url');
-                localStorage.removeItem('supabase-key');
+            if (confirm('Clear all local data?')) {
+                localStorage.clear();
                 location.reload();
             }
         }

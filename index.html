@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#4f46e5">
+    <meta name="theme-color" content="#0d1f17">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>🏸 Badminton Cost Splitter</title>
@@ -11,7 +11,28 @@
     <!-- Supabase JS Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --bg-primary: #0d1f17;
+            --bg-secondary: #1a2e23;
+            --bg-card: #1e3a2b;
+            --bg-input: #0d1f17;
+            --accent-green: #4ade80;
+            --accent-orange: #f97316;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --border-color: #2d4a3a;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -20,135 +41,286 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
             min-height: 100vh;
-            padding: 16px;
+            color: var(--text-primary);
             padding-bottom: 100px;
         }
 
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
+        /* Header */
+        .app-header {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: var(--bg-primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        header {
-            text-align: center;
-            color: white;
-            padding: 20px 0;
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            margin-right: 12px;
         }
 
-        header h1 {
-            font-size: 1.8rem;
-            margin-bottom: 8px;
+        .app-header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
         }
 
-        header p {
-            opacity: 0.9;
-            font-size: 0.95rem;
-        }
-
-        .connection-status {
-            display: inline-flex;
+        .connection-badge {
+            margin-left: auto;
+            display: flex;
             align-items: center;
             gap: 6px;
-            background: rgba(255,255,255,0.2);
-            padding: 4px 12px;
+            background: var(--bg-card);
+            padding: 6px 12px;
             border-radius: 20px;
             font-size: 0.75rem;
-            margin-top: 8px;
         }
 
         .status-dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: #fbbf24;
+            background: var(--warning);
         }
 
         .status-dot.connected {
-            background: #34d399;
+            background: var(--success);
         }
 
         .status-dot.error {
-            background: #f87171;
+            background: var(--error);
         }
 
-        .card {
-            background: white;
+        /* Hero Image */
+        .hero-section {
+            padding: 0 20px;
+            margin-bottom: 20px;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 180px;
             border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
         }
 
-        .card h2 {
-            color: #4f46e5;
-            font-size: 1.1rem;
-            margin-bottom: 16px;
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        /* Session Info Card */
+        .session-info {
+            padding: 0 20px;
+            margin-bottom: 20px;
+        }
+
+        .session-label {
+            color: var(--accent-green);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .session-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .session-date {
             display: flex;
             align-items: center;
             gap: 8px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 16px;
         }
 
-        .session-container {
-            border: 2px dashed #e5e7eb;
+        .venue-btn {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            border: 1.5px solid var(--accent-green);
             border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            background: #fafafa;
+            color: var(--accent-green);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .session-header {
+        /* Container */
+        .container {
+            padding: 0 20px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
 
-        .session-header h3 {
-            color: #374151;
-            font-size: 1rem;
+        .card h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
         }
 
-        .session-header .delete-session {
-            background: #fee2e2;
-            color: #dc2626;
+        .card-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+
+        /* Info Rows */
+        .info-row {
+            display: flex;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-row .icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-right: 12px;
+        }
+
+        .info-row .label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .info-row .value {
+            margin-left: auto;
+            font-weight: 500;
+            text-align: right;
+        }
+
+        .info-row .value.warning {
+            color: var(--accent-orange);
+        }
+
+        .info-row .value .subtext {
+            font-size: 0.75rem;
+            color: var(--accent-orange);
+            text-transform: uppercase;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            padding: 0 20px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab {
+            flex: 1;
+            min-width: 80px;
+            padding: 12px 16px;
             border: none;
-            border-radius: 8px;
-            padding: 6px 12px;
-            font-size: 0.8rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
             cursor: pointer;
-            -webkit-appearance: none;
-            appearance: none;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            white-space: nowrap;
+            transition: all 0.2s;
         }
 
+        .tab.active {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Input Groups */
         .input-group {
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
 
         .input-group label {
             display: block;
-            color: #6b7280;
+            color: var(--text-secondary);
             font-size: 0.85rem;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+            font-weight: 500;
         }
 
-        .input-group input, .input-group select {
+        .input-group input,
+        .input-group select {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e5e7eb;
-            border-radius: 10px;
-            font-size: 16px; /* Prevents zoom on iOS */
-            transition: border-color 0.2s;
-            -webkit-appearance: none;
-            appearance: none;
-            background: white;
+            padding: 14px 16px;
+            background: var(--bg-input);
+            border: 1.5px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 16px;
+            color: var(--text-primary);
+            font-family: inherit;
         }
 
-        .input-group input:focus, .input-group select:focus {
+        .input-group input:focus,
+        .input-group select:focus {
             outline: none;
-            border-color: #4f46e5;
+            border-color: var(--accent-green);
+        }
+
+        .input-group input::placeholder {
+            color: var(--text-muted);
         }
 
         .input-row {
@@ -157,6 +329,39 @@
             gap: 12px;
         }
 
+        /* Session Container */
+        .session-container {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .session-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        /* Player Tags */
         .player-tags {
             display: flex;
             flex-wrap: wrap;
@@ -165,43 +370,63 @@
         }
 
         .player-tag {
-            background: #e0e7ff;
-            color: #4338ca;
-            padding: 6px 12px;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            padding: 8px 14px;
             border-radius: 20px;
             font-size: 0.85rem;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            border: 1px solid var(--border-color);
         }
 
         .player-tag .remove {
             cursor: pointer;
-            font-weight: bold;
             opacity: 0.7;
-            padding: 2px 6px;
+            font-size: 1rem;
         }
 
-        .player-tag .remove:hover,
-        .player-tag .remove:active {
+        .player-tag .remove:hover {
             opacity: 1;
         }
 
-        .btn {
+        /* Add Player Row */
+        .add-player-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .add-player-row input {
+            flex: 1;
+        }
+
+        .add-player-row button {
             padding: 14px 20px;
+            background: var(--accent-green);
+            color: var(--bg-primary);
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            -webkit-appearance: none;
-            appearance: none;
-            touch-action: manipulation;
+            width: 100%;
+            font-family: inherit;
+            transition: transform 0.2s, opacity 0.2s;
         }
 
         .btn:active {
@@ -214,101 +439,110 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: white;
-            width: 100%;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+            background: var(--accent-green);
+            color: var(--bg-primary);
         }
 
         .btn-secondary {
-            background: #f3f4f6;
-            color: #374151;
-            width: 100%;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1.5px solid var(--border-color);
         }
 
-        .btn-success {
-            background: linear-gradient(135deg, #059669, #10b981);
-            color: white;
-            width: 100%;
+        .btn-outline {
+            background: transparent;
+            color: var(--accent-green);
+            border: 1.5px solid var(--accent-green);
         }
 
-        .add-player-row {
+        /* Quick Add */
+        .quick-add {
             display: flex;
+            flex-wrap: wrap;
             gap: 8px;
         }
 
-        .add-player-row input {
+        .quick-add-btn {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .quick-add-btn:active {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+            border-color: var(--accent-green);
+        }
+
+        /* Player List */
+        .player-list {
+            margin-top: 8px;
+        }
+
+        .player-item {
+            display: flex;
+            align-items: center;
+            padding: 14px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .player-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg-input);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 1.2rem;
+            border: 2px solid var(--border-color);
+        }
+
+        .player-info {
             flex: 1;
         }
 
-        .add-player-row button {
-            padding: 12px 20px;
-            background: #4f46e5;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 18px;
-            cursor: pointer;
-            -webkit-appearance: none;
-            appearance: none;
-            touch-action: manipulation;
+        .player-name {
+            font-weight: 600;
+            margin-bottom: 2px;
         }
 
-        /* Results Section */
-        .player-result {
-            background: #f9fafb;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            border-left: 4px solid #4f46e5;
+        .player-status {
+            font-size: 0.8rem;
+            color: var(--accent-green);
         }
 
-        .player-result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
+        .player-status.pending {
+            color: var(--accent-orange);
         }
 
-        .player-result-header h4 {
-            color: #1f2937;
+        .player-amount {
+            font-weight: 700;
             font-size: 1.1rem;
         }
 
-        .player-result-header .total {
-            background: #4f46e5;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-        }
-
-        .player-breakdown {
-            font-size: 0.85rem;
-            color: #6b7280;
-        }
-
-        .player-breakdown div {
-            padding: 4px 0;
+        .player-check {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent-green);
             display: flex;
-            justify-content: space-between;
+            align-items: center;
+            justify-content: center;
+            margin-left: 12px;
         }
 
-        .share-btn {
-            background: #10b981;
-            color: white;
-            border: none;
-            padding: 10px 14px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            margin-top: 8px;
-            -webkit-appearance: none;
-            appearance: none;
-            touch-action: manipulation;
-        }
-
+        /* Summary Stats */
         .summary-stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -317,194 +551,288 @@
         }
 
         .stat-box {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: white;
+            background: var(--bg-secondary);
             padding: 16px;
             border-radius: 12px;
             text-align: center;
+            border: 1px solid var(--border-color);
         }
 
         .stat-box .number {
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-green);
         }
 
         .stat-box .label {
-            font-size: 0.75rem;
-            opacity: 0.9;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .quick-add {
+        /* Bottom Bar */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-secondary);
+            padding: 16px 20px;
+            padding-bottom: calc(16px + env(safe-area-inset-bottom));
+            border-top: 1px solid var(--border-color);
+            display: none;
+        }
+
+        .bottom-bar.show {
+            display: block;
+        }
+
+        .bottom-bar-content {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
         }
 
-        .quick-add-btn {
-            background: #fef3c7;
-            color: #92400e;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 16px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            -webkit-appearance: none;
-            appearance: none;
-            touch-action: manipulation;
+        .cost-info .label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .quick-add-btn:hover,
-        .quick-add-btn:active {
-            background: #fde68a;
+        .cost-info .amount {
+            font-size: 1.5rem;
+            font-weight: 700;
         }
 
-        /* Toast notification */
+        .cost-info .amount.green {
+            color: var(--accent-green);
+        }
+
+        /* Toast */
         .toast {
             position: fixed;
-            bottom: 80px;
+            bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
-            background: #1f2937;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 10px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            padding: 14px 24px;
+            border-radius: 12px;
             font-size: 0.9rem;
             opacity: 0;
             transition: opacity 0.3s;
             z-index: 1000;
-            pointer-events: none;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .toast.show {
             opacity: 1;
         }
 
-        /* Tabs - FIXED */
-        .tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 14px 8px;
-            border: none;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 600;
+        /* History Item */
+        .history-item {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
             cursor: pointer;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            -webkit-appearance: none;
-            appearance: none;
-            touch-action: manipulation;
-            user-select: none;
-            -webkit-user-select: none;
+            border: 1px solid var(--border-color);
+            transition: border-color 0.2s;
         }
 
-        .tab:active {
-            opacity: 0.8;
+        .history-item:active {
+            border-color: var(--accent-green);
         }
 
-        .tab.active {
-            background: white;
-            color: #4f46e5;
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
         }
 
-        .tab-content {
-            display: none;
+        .history-date {
+            font-weight: 600;
         }
 
-        .tab-content.active {
-            display: block;
+        .history-time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
         }
 
-        /* Empty state */
+        .history-amount {
+            font-weight: 700;
+            color: var(--accent-green);
+            font-size: 1.1rem;
+        }
+
+        .history-location {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .history-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 40px 20px;
-            color: #9ca3af;
+            color: var(--text-muted);
         }
 
         .empty-state .icon {
             font-size: 3rem;
             margin-bottom: 12px;
+            opacity: 0.5;
         }
 
-        /* History */
-        .history-item {
-            background: #f9fafb;
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: background 0.2s;
-            -webkit-tap-highlight-color: transparent;
+        /* Settings */
+        .settings-input {
+            margin-bottom: 16px;
         }
 
-        .history-item:hover,
-        .history-item:active {
-            background: #f3f4f6;
-        }
-
-        .history-item .date {
-            font-size: 0.8rem;
-            color: #6b7280;
-        }
-
-        .history-item .location {
+        .settings-input label {
+            display: block;
             font-size: 0.85rem;
-            color: #4f46e5;
-            margin-top: 4px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 500;
         }
 
-        .history-item .amount {
-            font-weight: bold;
-            color: #4f46e5;
+        .settings-input input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-input);
+            border: 1.5px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 16px;
+            color: var(--text-primary);
+            font-family: inherit;
         }
 
-        .history-item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+        .settings-input input:focus {
+            outline: none;
+            border-color: var(--accent-green);
         }
 
-        /* Locations dropdown */
-        .location-suggestions {
-            position: absolute;
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-top: none;
-            border-radius: 0 0 10px 10px;
-            max-height: 150px;
-            overflow-y: auto;
-            z-index: 100;
-            width: calc(100% - 4px);
-            margin-left: 2px;
-        }
-
-        .location-suggestion {
+        .settings-status {
             padding: 12px;
-            cursor: pointer;
+            border-radius: 10px;
+            margin-top: 12px;
+            font-size: 0.85rem;
         }
 
-        .location-suggestion:hover,
-        .location-suggestion:active {
-            background: #f3f4f6;
+        .settings-status.success {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
         }
 
+        .settings-status.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error);
+        }
+
+        /* Location Suggestions */
         .input-wrapper {
             position: relative;
         }
 
-        /* Loading spinner */
+        .location-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border: 1.5px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+
+        .location-suggestion {
+            padding: 14px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .location-suggestion:last-child {
+            border-bottom: none;
+        }
+
+        .location-suggestion:active {
+            background: var(--bg-secondary);
+        }
+
+        /* Toggle Switch */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toggle {
+            width: 52px;
+            height: 28px;
+            background: var(--bg-input);
+            border-radius: 14px;
+            position: relative;
+            cursor: pointer;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .toggle.active {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+
+        .toggle.active::after {
+            transform: translateX(24px);
+        }
+
+        /* Badge */
+        .badge {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Spinner */
         .spinner {
             display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid #ffffff;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--bg-primary);
             border-radius: 50%;
             border-top-color: transparent;
             animation: spin 1s linear infinite;
@@ -514,118 +842,121 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Settings card */
-        .settings-input {
-            margin-bottom: 16px;
-        }
-
-        .settings-input label {
-            display: block;
-            font-size: 0.85rem;
-            color: #6b7280;
-            margin-bottom: 6px;
-        }
-
-        .settings-input input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e5e7eb;
-            border-radius: 10px;
-            font-size: 16px;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        .settings-input input:focus {
-            outline: none;
-            border-color: #4f46e5;
-        }
-
-        .settings-saved {
-            color: #059669;
-            font-size: 0.85rem;
-            margin-top: 12px;
-            padding: 10px;
-            background: #ecfdf5;
+        /* Share Button */
+        .share-btn {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+            border: none;
+            padding: 10px 16px;
             border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 12px;
         }
 
-        .settings-saved.error {
-            color: #dc2626;
-            background: #fef2f2;
-        }
-
+        /* Responsive */
         @media (max-width: 380px) {
             .stat-box .number {
-                font-size: 1.2rem;
-            }
-            .stat-box .label {
-                font-size: 0.65rem;
+                font-size: 1.1rem;
             }
             .input-row {
                 grid-template-columns: 1fr;
             }
             .tab {
-                padding: 12px 4px;
-                font-size: 0.75rem;
+                padding: 10px 12px;
+                font-size: 0.8rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🏸 Badminton Splitter</h1>
-            <p>Split court costs fairly among players</p>
-            <div class="connection-status">
-                <span class="status-dot" id="status-dot"></span>
-                <span id="status-text">Connecting...</span>
-            </div>
-        </header>
-
-        <div class="tabs">
-            <button class="tab active" id="tab-input" onclick="showTab('input', this)">📝 Input</button>
-            <button class="tab" id="tab-results" onclick="showTab('results', this)">💰 Results</button>
-            <button class="tab" id="tab-history" onclick="showTab('history', this)">📜 History</button>
-            <button class="tab" id="tab-settings" onclick="showTab('settings', this)">⚙️</button>
+    <!-- App Header -->
+    <header class="app-header">
+        <button class="back-btn" onclick="history.back()">‹</button>
+        <h1>Weekly Game RSVP</h1>
+        <div class="connection-badge">
+            <span class="status-dot" id="status-dot"></span>
+            <span id="status-text">Connecting...</span>
         </div>
+    </header>
 
-        <!-- INPUT TAB -->
-        <div id="input-tab" class="tab-content active">
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-image">
+            <div class="hero-placeholder">🏸</div>
+        </div>
+    </div>
+
+    <!-- Session Info -->
+    <div class="session-info">
+        <div class="session-label">UPCOMING SESSION</div>
+        <h2 class="session-title" id="current-session-title">Badminton Session</h2>
+        <div class="session-date">
+            <span>📅</span>
+            <span id="current-session-date">Select a date to begin</span>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab active" id="tab-input" onclick="showTab('input', this)">📝 Input</button>
+        <button class="tab" id="tab-results" onclick="showTab('results', this)">💰 Results</button>
+        <button class="tab" id="tab-history" onclick="showTab('history', this)">📜 History</button>
+        <button class="tab" id="tab-settings" onclick="showTab('settings', this)">⚙️ Settings</button>
+    </div>
+
+    <!-- INPUT TAB -->
+    <div id="input-tab" class="tab-content active">
+        <div class="container">
+            <!-- Attendance Card -->
             <div class="card">
-                <h2>📅 Session Details</h2>
+                <h2>Your Session</h2>
+                <p class="card-subtitle">Add session details and players</p>
+                
                 <div id="sessions-container">
                     <!-- Sessions will be added here dynamically -->
                 </div>
-                <button class="btn btn-secondary" onclick="addSession()">
-                    ➕ Add Session
+                
+                <button class="btn btn-outline" onclick="addSession()" style="margin-top: 12px;">
+                    ➕ Add Another Session
                 </button>
             </div>
 
+            <!-- Quick Add Players Card -->
             <div class="card">
-                <h2>⭐ Quick Add Players</h2>
-                <p style="font-size: 0.85rem; color: #6b7280; margin-bottom: 12px;">
-                    Tap a name to add to the last session
-                </p>
+                <div class="card-header">
+                    <div>
+                        <h2>Quick Add Players</h2>
+                        <p class="card-subtitle">Tap to add to current session</p>
+                    </div>
+                </div>
                 <div id="quick-add-players" class="quick-add">
-                    <span style="color: #9ca3af; font-size: 0.85rem;">Loading players...</span>
+                    <span style="color: var(--text-muted); font-size: 0.85rem;">Configure Supabase in Settings ⚙️</span>
                 </div>
             </div>
 
+            <!-- Calculate Button -->
             <button class="btn btn-primary" onclick="calculateCosts()" id="calculate-btn">
                 🧮 Calculate Costs
             </button>
             
-            <button class="btn btn-success" onclick="saveToDatabase()" id="save-btn" style="margin-top: 12px; display: none;">
+            <button class="btn btn-primary" onclick="saveToDatabase()" id="save-btn" style="margin-top: 12px; display: none; background: var(--success);">
                 💾 Save to Database
             </button>
         </div>
+    </div>
 
-        <!-- RESULTS TAB -->
-        <div id="results-tab" class="tab-content">
+    <!-- RESULTS TAB -->
+    <div id="results-tab" class="tab-content">
+        <div class="container">
+            <!-- Summary Card -->
             <div class="card">
                 <h2>📊 Summary</h2>
-                <div class="summary-stats" id="summary-stats">
+                <div class="summary-stats">
                     <div class="stat-box">
                         <div class="number" id="total-cost">AED 0</div>
                         <div class="label">Total Cost</div>
@@ -641,9 +972,13 @@
                 </div>
             </div>
 
+            <!-- Confirmed Players Card -->
             <div class="card">
-                <h2>👥 Individual Amounts</h2>
-                <div id="results-container">
+                <div class="card-header">
+                    <h2>Confirmed Players</h2>
+                    <span class="badge" id="player-count-badge">0 Players</span>
+                </div>
+                <div id="results-container" class="player-list">
                     <div class="empty-state">
                         <div class="icon">📊</div>
                         <p>Add sessions and players, then calculate to see results</p>
@@ -651,19 +986,20 @@
                 </div>
             </div>
 
+            <!-- Share All Button -->
             <button class="btn btn-primary" onclick="shareAllResults()">
                 📤 Share All Results
             </button>
         </div>
+    </div>
 
-        <!-- HISTORY TAB -->
-        <div id="history-tab" class="tab-content">
+    <!-- HISTORY TAB -->
+    <div id="history-tab" class="tab-content">
+        <div class="container">
             <div class="card">
                 <h2>📜 Calculation History</h2>
-                <p style="font-size: 0.85rem; color: #6b7280; margin-bottom: 12px;">
-                    Tap an entry to view details
-                </p>
-                <div id="history-container">
+                <p class="card-subtitle">Tap an entry to view details</p>
+                <div id="history-container" style="margin-top: 16px;">
                     <div class="empty-state">
                         <div class="icon">📜</div>
                         <p>Loading history...</p>
@@ -671,16 +1007,17 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- SETTINGS TAB -->
-        <div id="settings-tab" class="tab-content">
+    <!-- SETTINGS TAB -->
+    <div id="settings-tab" class="tab-content">
+        <div class="container">
+            <!-- Supabase Config Card -->
             <div class="card">
                 <h2>⚙️ Supabase Configuration</h2>
-                <p style="font-size: 0.85rem; color: #6b7280; margin-bottom: 16px;">
-                    Enter your Supabase credentials to enable cloud sync
-                </p>
+                <p class="card-subtitle">Enter your credentials to enable cloud sync</p>
                 
-                <div class="settings-input">
+                <div class="settings-input" style="margin-top: 16px;">
                     <label>Supabase Project URL</label>
                     <input type="url" id="supabase-url" placeholder="https://xxxxx.supabase.co">
                 </div>
@@ -694,19 +1031,21 @@
                     💾 Save & Connect
                 </button>
                 
-                <div id="settings-status" class="settings-saved" style="display: none;"></div>
+                <div id="settings-status" class="settings-status" style="display: none;"></div>
             </div>
 
+            <!-- Saved Locations Card -->
             <div class="card">
                 <h2>📍 Saved Locations</h2>
-                <div id="saved-locations">
-                    <span style="color: #9ca3af; font-size: 0.85rem;">Connect to Supabase to see locations</span>
+                <div id="saved-locations" style="margin-top: 12px;">
+                    <span style="color: var(--text-muted); font-size: 0.85rem;">Connect to Supabase to see locations</span>
                 </div>
             </div>
 
+            <!-- Manage Players Card -->
             <div class="card">
                 <h2>👥 Manage Players</h2>
-                <div class="input-group">
+                <div class="input-group" style="margin-top: 12px;">
                     <label>Add New Player</label>
                     <div class="add-player-row">
                         <input type="text" id="new-player-name" placeholder="Enter player name...">
@@ -714,19 +1053,38 @@
                     </div>
                 </div>
                 <div id="all-players-list" style="margin-top: 12px;">
-                    <span style="color: #9ca3af; font-size: 0.85rem;">Connect to Supabase to manage players</span>
+                    <span style="color: var(--text-muted); font-size: 0.85rem;">Connect to Supabase to manage players</span>
                 </div>
             </div>
 
+            <!-- Reset Card -->
             <div class="card">
                 <h2>🔄 Reset App</h2>
-                <button class="btn btn-secondary" onclick="resetApp()" style="background: #fee2e2; color: #dc2626;">
+                <button class="btn btn-secondary" onclick="resetApp()" style="background: rgba(239, 68, 68, 0.2); color: var(--error); border-color: var(--error);">
                     🗑️ Clear All Local Data
                 </button>
             </div>
         </div>
     </div>
 
+    <!-- Bottom Bar -->
+    <div class="bottom-bar" id="bottom-bar">
+        <div class="bottom-bar-content">
+            <div class="cost-info">
+                <div class="label">ESTIMATED COST</div>
+                <div class="amount" id="bottom-per-person">AED 0 <span style="font-size: 0.9rem; font-weight: 400;">/ person</span></div>
+            </div>
+            <div class="cost-info" style="text-align: right;">
+                <div class="label">POOL TOTAL</div>
+                <div class="amount green" id="bottom-total">AED 0</div>
+            </div>
+        </div>
+        <button class="btn btn-primary" onclick="saveToDatabase()" id="bottom-save-btn">
+            Confirm RSVP & Save
+        </button>
+    </div>
+
+    <!-- Toast -->
     <div class="toast" id="toast">Message copied!</div>
 
     <script>
@@ -743,38 +1101,64 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('App initializing...');
             loadSupabaseConfig();
-            addSession(); // Start with one session
+            addSession();
+            updateSessionTitle();
         });
 
-        // ============ TAB NAVIGATION - FIXED ============
+        // ============ UPDATE SESSION TITLE ============
+        function updateSessionTitle() {
+            var sessions = document.querySelectorAll('.session-container');
+            if (sessions.length > 0) {
+                var firstSession = sessions[0];
+                var sessionNum = firstSession.id.split('-')[1];
+                var dateInput = document.getElementById('date-' + sessionNum);
+                var locationInput = document.getElementById('location-' + sessionNum);
+                
+                if (dateInput && dateInput.value) {
+                    var date = new Date(dateInput.value);
+                    var options = { weekday: 'long', month: 'short', day: 'numeric' };
+                    var formattedDate = date.toLocaleDateString('en-US', options);
+                    document.getElementById('current-session-date').textContent = formattedDate + ' • 10:00 AM';
+                    
+                    var dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
+                    document.getElementById('current-session-title').textContent = dayName + ' Badminton Session';
+                }
+            }
+        }
+
+        // ============ TAB NAVIGATION ============
         function showTab(tabName, clickedTab) {
             console.log('Switching to tab:', tabName);
             
-            // Remove active class from all tabs
             document.querySelectorAll('.tab').forEach(function(tab) {
                 tab.classList.remove('active');
             });
             
-            // Remove active class from all tab contents
             document.querySelectorAll('.tab-content').forEach(function(content) {
                 content.classList.remove('active');
             });
             
-            // Add active class to clicked tab
             if (clickedTab) {
                 clickedTab.classList.add('active');
             } else {
                 document.getElementById('tab-' + tabName).classList.add('active');
             }
             
-            // Show the corresponding tab content
             document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Show/hide bottom bar
+            var bottomBar = document.getElementById('bottom-bar');
+            if (tabName === 'results' && calculationResults) {
+                bottomBar.classList.add('show');
+            } else {
+                bottomBar.classList.remove('show');
+            }
         }
 
         // ============ SUPABASE CONFIG ============
         function loadSupabaseConfig() {
-            const url = localStorage.getItem('supabase-url');
-            const key = localStorage.getItem('supabase-key');
+            var url = localStorage.getItem('supabase-url');
+            var key = localStorage.getItem('supabase-key');
             
             if (url && key) {
                 document.getElementById('supabase-url').value = url;
@@ -782,14 +1166,12 @@
                 initializeSupabase(url, key);
             } else {
                 updateConnectionStatus('disconnected', 'Not configured');
-                document.getElementById('quick-add-players').innerHTML = 
-                    '<span style="color: #9ca3af; font-size: 0.85rem;">Configure Supabase in Settings ⚙️</span>';
             }
         }
 
         function saveSupabaseConfig() {
-            const url = document.getElementById('supabase-url').value.trim();
-            const key = document.getElementById('supabase-key').value.trim();
+            var url = document.getElementById('supabase-url').value.trim();
+            var key = document.getElementById('supabase-key').value.trim();
             
             if (!url || !key) {
                 showToast('Please enter both URL and Key');
@@ -809,41 +1191,39 @@
                 
                 supabase = window.supabase.createClient(url, key);
                 
-                // Test connection by fetching players
-                const { data, error } = await supabase.from('players').select('*').limit(1);
+                var result = await supabase.from('players').select('*').limit(1);
                 
-                if (error) {
-                    console.error('Supabase error:', error);
-                    throw error;
+                if (result.error) {
+                    console.error('Supabase error:', result.error);
+                    throw result.error;
                 }
                 
                 console.log('Connected to Supabase!');
                 updateConnectionStatus('connected', 'Connected');
                 
-                const statusEl = document.getElementById('settings-status');
+                var statusEl = document.getElementById('settings-status');
                 statusEl.textContent = '✓ Connected successfully!';
-                statusEl.className = 'settings-saved';
+                statusEl.className = 'settings-status success';
                 statusEl.style.display = 'block';
                 
-                // Load data
                 await loadPlayers();
                 await loadLocations();
                 await loadHistory();
                 
             } catch (error) {
                 console.error('Supabase connection error:', error);
-                updateConnectionStatus('error', 'Connection failed');
+                updateConnectionStatus('error', 'Failed');
                 
-                const statusEl = document.getElementById('settings-status');
+                var statusEl = document.getElementById('settings-status');
                 statusEl.textContent = '✗ Connection failed: ' + error.message;
-                statusEl.className = 'settings-saved error';
+                statusEl.className = 'settings-status error';
                 statusEl.style.display = 'block';
             }
         }
 
         function updateConnectionStatus(status, text) {
-            const dot = document.getElementById('status-dot');
-            const statusText = document.getElementById('status-text');
+            var dot = document.getElementById('status-dot');
+            var statusText = document.getElementById('status-text');
             
             dot.className = 'status-dot';
             if (status === 'connected') dot.classList.add('connected');
@@ -858,14 +1238,14 @@
             
             try {
                 console.log('Loading players...');
-                const { data, error } = await supabase
+                var result = await supabase
                     .from('players')
                     .select('*')
                     .order('name');
                 
-                if (error) throw error;
+                if (result.error) throw result.error;
                 
-                allPlayers = data || [];
+                allPlayers = result.data || [];
                 console.log('Loaded players:', allPlayers.length);
                 updateQuickAddButtons();
                 updatePlayersListInSettings();
@@ -877,16 +1257,16 @@
         }
 
         function updateQuickAddButtons() {
-            const container = document.getElementById('quick-add-players');
+            var container = document.getElementById('quick-add-players');
             
             if (allPlayers.length === 0) {
-                container.innerHTML = '<span style="color: #9ca3af; font-size: 0.85rem;">No players yet. Add some in Settings ⚙️</span>';
+                container.innerHTML = '<span style="color: var(--text-muted); font-size: 0.85rem;">No players yet. Add some in Settings ⚙️</span>';
                 return;
             }
             
             container.innerHTML = '';
             allPlayers.forEach(function(player) {
-                const btn = document.createElement('button');
+                var btn = document.createElement('button');
                 btn.className = 'quick-add-btn';
                 btn.textContent = player.name;
                 btn.onclick = function() {
@@ -897,18 +1277,18 @@
         }
 
         function updatePlayersListInSettings() {
-            const container = document.getElementById('all-players-list');
+            var container = document.getElementById('all-players-list');
             
             if (allPlayers.length === 0) {
-                container.innerHTML = '<span style="color: #9ca3af; font-size: 0.85rem;">No players yet</span>';
+                container.innerHTML = '<span style="color: var(--text-muted); font-size: 0.85rem;">No players yet</span>';
                 return;
             }
             
-            const tagsDiv = document.createElement('div');
+            var tagsDiv = document.createElement('div');
             tagsDiv.className = 'player-tags';
             
             allPlayers.forEach(function(player) {
-                const tag = document.createElement('span');
+                var tag = document.createElement('span');
                 tag.className = 'player-tag';
                 tag.innerHTML = player.name + ' <span class="remove" onclick="deletePlayer(\'' + player.id + '\')">×</span>';
                 tagsDiv.appendChild(tag);
@@ -924,8 +1304,8 @@
                 return;
             }
             
-            const input = document.getElementById('new-player-name');
-            const name = input.value.trim();
+            var input = document.getElementById('new-player-name');
+            var name = input.value.trim();
             
             if (!name) {
                 showToast('Please enter a player name');
@@ -933,16 +1313,16 @@
             }
             
             try {
-                const { data, error } = await supabase
+                var result = await supabase
                     .from('players')
                     .insert([{ name: name }])
                     .select();
                 
-                if (error) {
-                    if (error.code === '23505') {
+                if (result.error) {
+                    if (result.error.code === '23505') {
                         showToast('Player already exists');
                     } else {
-                        throw error;
+                        throw result.error;
                     }
                     return;
                 }
@@ -961,12 +1341,12 @@
             if (!confirm('Delete this player?')) return;
             
             try {
-                const { error } = await supabase
+                var result = await supabase
                     .from('players')
                     .delete()
                     .eq('id', playerId);
                 
-                if (error) throw error;
+                if (result.error) throw result.error;
                 
                 await loadPlayers();
                 showToast('Player deleted');
@@ -982,16 +1362,15 @@
             if (!supabase) return;
             
             try {
-                const { data, error } = await supabase
+                var result = await supabase
                     .from('sessions')
                     .select('court_location')
                     .order('created_at', { ascending: false });
                 
-                if (error) throw error;
+                if (result.error) throw result.error;
                 
-                // Get unique locations
-                const uniqueLocations = [];
-                (data || []).forEach(function(s) {
+                var uniqueLocations = [];
+                (result.data || []).forEach(function(s) {
                     if (s.court_location && uniqueLocations.indexOf(s.court_location) === -1) {
                         uniqueLocations.push(s.court_location);
                     }
@@ -1005,18 +1384,18 @@
         }
 
         function updateLocationsInSettings() {
-            const container = document.getElementById('saved-locations');
+            var container = document.getElementById('saved-locations');
             
             if (savedLocations.length === 0) {
-                container.innerHTML = '<span style="color: #9ca3af; font-size: 0.85rem;">No locations saved yet</span>';
+                container.innerHTML = '<span style="color: var(--text-muted); font-size: 0.85rem;">No locations saved yet</span>';
                 return;
             }
             
-            const tagsDiv = document.createElement('div');
+            var tagsDiv = document.createElement('div');
             tagsDiv.className = 'player-tags';
             
             savedLocations.forEach(function(loc) {
-                const tag = document.createElement('span');
+                var tag = document.createElement('span');
                 tag.className = 'player-tag';
                 tag.textContent = '📍 ' + loc;
                 tagsDiv.appendChild(tag);
@@ -1029,24 +1408,24 @@
         // ============ SESSIONS (UI) ============
         function addSession() {
             sessionCounter++;
-            const container = document.getElementById('sessions-container');
+            var container = document.getElementById('sessions-container');
             
-            const today = new Date().toISOString().split('T')[0];
-            const sessionNum = sessionCounter;
+            var today = new Date().toISOString().split('T')[0];
+            var sessionNum = sessionCounter;
             
-            const sessionDiv = document.createElement('div');
+            var sessionDiv = document.createElement('div');
             sessionDiv.className = 'session-container';
             sessionDiv.id = 'session-' + sessionNum;
             sessionDiv.innerHTML = 
                 '<div class="session-header">' +
-                    '<h3>Session ' + sessionNum + '</h3>' +
-                    '<button class="delete-session" onclick="deleteSession(' + sessionNum + ')">🗑️ Remove</button>' +
+                    '<h3>📅 Session ' + sessionNum + '</h3>' +
+                    '<button class="delete-btn" onclick="deleteSession(' + sessionNum + ')">🗑️ Remove</button>' +
                 '</div>' +
                 
                 '<div class="input-row">' +
                     '<div class="input-group">' +
                         '<label>Date</label>' +
-                        '<input type="date" id="date-' + sessionNum + '" value="' + today + '">' +
+                        '<input type="date" id="date-' + sessionNum + '" value="' + today + '" onchange="updateSessionTitle()">' +
                     '</div>' +
                     '<div class="input-group">' +
                         '<label>Court Cost (AED)</label>' +
@@ -1055,20 +1434,20 @@
                 '</div>' +
                 
                 '<div class="input-group">' +
-                    '<label>Court Location</label>' +
+                    '<label>📍 Court Location</label>' +
                     '<div class="input-wrapper">' +
                         '<input type="text" id="location-' + sessionNum + '" placeholder="Enter court location..." ' +
                                'onfocus="showLocationSuggestions(' + sessionNum + ')" ' +
                                'onblur="hideLocationSuggestions(' + sessionNum + ')" ' +
                                'oninput="filterLocationSuggestions(' + sessionNum + ')">' +
-                        '<div class="location-suggestions" id="location-suggestions-' + sessionNum + '" style="display: none;"></div>' +
+                        '<div class="location-suggestions" id="location-suggestions-' + sessionNum + '"></div>' +
                     '</div>' +
                 '</div>' +
                 
                 '<div class="input-group">' +
-                    '<label>Players (press Enter or + to add)</label>' +
+                    '<label>👥 Players</label>' +
                     '<div class="add-player-row">' +
-                        '<input type="text" id="player-input-' + sessionNum + '" placeholder="Enter player name..." ' +
+                        '<input type="text" id="player-input-' + sessionNum + '" placeholder="Add player name..." ' +
                                'onkeypress="handlePlayerInput(event, ' + sessionNum + ')">' +
                         '<button onclick="addPlayerToSession(' + sessionNum + ')">+</button>' +
                     '</div>' +
@@ -1076,22 +1455,23 @@
                 '</div>';
             
             container.appendChild(sessionDiv);
+            updateSessionTitle();
         }
 
         function deleteSession(sessionNum) {
-            const sessionDiv = document.getElementById('session-' + sessionNum);
+            var sessionDiv = document.getElementById('session-' + sessionNum);
             if (sessionDiv) {
                 sessionDiv.remove();
             }
         }
 
         function showLocationSuggestions(sessionNum) {
-            const container = document.getElementById('location-suggestions-' + sessionNum);
+            var container = document.getElementById('location-suggestions-' + sessionNum);
             if (savedLocations.length === 0) return;
             
             container.innerHTML = '';
             savedLocations.forEach(function(loc) {
-                const div = document.createElement('div');
+                var div = document.createElement('div');
                 div.className = 'location-suggestion';
                 div.textContent = loc;
                 div.onmousedown = function() {
@@ -1110,10 +1490,10 @@
         }
 
         function filterLocationSuggestions(sessionNum) {
-            const input = document.getElementById('location-' + sessionNum).value.toLowerCase();
-            const container = document.getElementById('location-suggestions-' + sessionNum);
+            var input = document.getElementById('location-' + sessionNum).value.toLowerCase();
+            var container = document.getElementById('location-suggestions-' + sessionNum);
             
-            const filtered = savedLocations.filter(function(loc) {
+            var filtered = savedLocations.filter(function(loc) {
                 return loc.toLowerCase().indexOf(input) !== -1;
             });
             
@@ -1124,7 +1504,7 @@
             
             container.innerHTML = '';
             filtered.forEach(function(loc) {
-                const div = document.createElement('div');
+                var div = document.createElement('div');
                 div.className = 'location-suggestion';
                 div.textContent = loc;
                 div.onmousedown = function() {
@@ -1148,24 +1528,22 @@
         }
 
         function addPlayerToSession(sessionNum, playerId, playerName) {
-            const input = document.getElementById('player-input-' + sessionNum);
-            const name = playerName || (input ? input.value.trim() : '');
+            var input = document.getElementById('player-input-' + sessionNum);
+            var name = playerName || (input ? input.value.trim() : '');
             
             if (!name) return;
             
-            const container = document.getElementById('players-' + sessionNum);
+            var container = document.getElementById('players-' + sessionNum);
             
-            // Check if player already exists in this session
-            const existingTags = container.querySelectorAll('.player-tag');
+            var existingTags = container.querySelectorAll('.player-tag');
             for (var i = 0; i < existingTags.length; i++) {
                 if (existingTags[i].dataset.name.toLowerCase() === name.toLowerCase()) {
-                    showToast('Player already added to this session!');
+                    showToast('Player already added!');
                     if (input) input.value = '';
                     return;
                 }
             }
             
-            // Find player ID if not provided
             if (!playerId) {
                 for (var j = 0; j < allPlayers.length; j++) {
                     if (allPlayers[j].name.toLowerCase() === name.toLowerCase()) {
@@ -1175,7 +1553,7 @@
                 }
             }
             
-            const tag = document.createElement('span');
+            var tag = document.createElement('span');
             tag.className = 'player-tag';
             tag.dataset.name = name;
             tag.dataset.id = playerId || '';
@@ -1186,27 +1564,26 @@
         }
 
         function addPlayerToCurrentSession(playerId, playerName) {
-            // Find the last session container
-            const sessions = document.querySelectorAll('.session-container');
+            var sessions = document.querySelectorAll('.session-container');
             if (sessions.length > 0) {
-                const lastSession = sessions[sessions.length - 1];
-                const sessionNum = lastSession.id.split('-')[1];
+                var lastSession = sessions[sessions.length - 1];
+                var sessionNum = lastSession.id.split('-')[1];
                 addPlayerToSession(parseInt(sessionNum), playerId, playerName);
             }
         }
 
         // ============ CALCULATIONS ============
         function calculateCosts() {
-            const sessions = [];
-            const sessionContainers = document.querySelectorAll('.session-container');
+            var sessions = [];
+            var sessionContainers = document.querySelectorAll('.session-container');
             
             sessionContainers.forEach(function(container, index) {
-                const sessionNum = container.id.split('-')[1];
-                const date = document.getElementById('date-' + sessionNum).value;
-                const cost = parseFloat(document.getElementById('cost-' + sessionNum).value) || 0;
-                const location = document.getElementById('location-' + sessionNum).value.trim();
-                const playerTags = container.querySelectorAll('#players-' + sessionNum + ' .player-tag');
-                const players = [];
+                var sessionNum = container.id.split('-')[1];
+                var date = document.getElementById('date-' + sessionNum).value;
+                var cost = parseFloat(document.getElementById('cost-' + sessionNum).value) || 0;
+                var location = document.getElementById('location-' + sessionNum).value.trim();
+                var playerTags = container.querySelectorAll('#players-' + sessionNum + ' .player-tag');
+                var players = [];
                 playerTags.forEach(function(tag) {
                     players.push({
                         id: tag.dataset.id,
@@ -1231,8 +1608,7 @@
                 return;
             }
 
-            // Calculate totals per player
-            const playerTotals = {};
+            var playerTotals = {};
             
             sessions.forEach(function(session) {
                 session.players.forEach(function(player) {
@@ -1267,52 +1643,54 @@
 
             displayResults(calculationResults);
             
-            // Show save button if connected
             if (supabase) {
                 document.getElementById('save-btn').style.display = 'block';
             }
             
-            // Switch to results tab
             showTab('results', document.getElementById('tab-results'));
         }
 
         function displayResults(results) {
-            // Update summary
             document.getElementById('total-cost').textContent = currency + ' ' + results.totalCost.toFixed(2);
             document.getElementById('total-players').textContent = results.totalPlayers;
             document.getElementById('total-sessions').textContent = results.totalSessions;
+            document.getElementById('player-count-badge').textContent = results.totalPlayers + ' Players';
 
-            // Display individual results
-            const container = document.getElementById('results-container');
+            // Update bottom bar
+            var avgPerPerson = results.totalCost / results.totalPlayers;
+            document.getElementById('bottom-per-person').innerHTML = currency + ' ' + avgPerPerson.toFixed(2) + ' <span style="font-size: 0.9rem; font-weight: 400;">/ person</span>';
+            document.getElementById('bottom-total').textContent = currency + ' ' + results.totalCost.toFixed(2);
+            document.getElementById('bottom-bar').classList.add('show');
+
+            var container = document.getElementById('results-container');
             container.innerHTML = '';
 
-            // Sort players by amount owed (descending)
-            const sortedPlayers = Object.values(results.playerTotals)
+            var sortedPlayers = Object.values(results.playerTotals)
                 .sort(function(a, b) { return b.total - a.total; });
 
-            sortedPlayers.forEach(function(player) {
-                const div = document.createElement('div');
-                div.className = 'player-result';
+            sortedPlayers.forEach(function(player, index) {
+                var div = document.createElement('div');
+                div.className = 'player-item';
                 
-                let breakdownHTML = '';
-                player.breakdown.forEach(function(b) {
-                    breakdownHTML += '<div>' +
-                        '<span>' + b.date + ' @ ' + b.location + '</span>' +
-                        '<span>' + currency + ' ' + b.amount.toFixed(2) + '</span>' +
-                    '</div>';
-                });
+                var initials = player.name.split(' ').map(function(n) { return n[0]; }).join('').toUpperCase().substring(0, 2);
+                
+                var breakdownText = player.breakdown.map(function(b) {
+                    return b.date + ' @ ' + b.location + ': ' + currency + ' ' + b.amount.toFixed(2);
+                }).join('\\n');
 
                 div.innerHTML = 
-                    '<div class="player-result-header">' +
-                        '<h4>' + player.name + '</h4>' +
-                        '<span class="total">' + currency + ' ' + player.total.toFixed(2) + '</span>' +
+                    '<div class="player-avatar">' + initials + '</div>' +
+                    '<div class="player-info">' +
+                        '<div class="player-name">' + player.name + '</div>' +
+                        '<div class="player-status">' + player.breakdown.length + ' session(s)</div>' +
                     '</div>' +
-                    '<div class="player-breakdown">' +
-                        breakdownHTML +
-                    '</div>' +
-                    '<button class="share-btn" onclick="sharePlayerResult(\'' + player.name.replace(/'/g, "\\'") + '\')">' +
-                        '📱 Share Message' +
-                    '</button>';
+                    '<div class="player-amount">' + currency + ' ' + player.total.toFixed(2) + '</div>' +
+                    '<div class="player-check">✓</div>';
+                
+                div.onclick = function() {
+                    sharePlayerResult(player.name);
+                };
+                
                 container.appendChild(div);
             });
         }
@@ -1324,17 +1702,18 @@
                 return;
             }
 
-            const btn = document.getElementById('save-btn');
+            var btn = document.getElementById('save-btn');
+            var bottomBtn = document.getElementById('bottom-save-btn');
             btn.disabled = true;
+            bottomBtn.disabled = true;
             btn.innerHTML = '<span class="spinner"></span> Saving...';
+            bottomBtn.innerHTML = '<span class="spinner"></span> Saving...';
 
             try {
-                // 1. Save each session
-                for (let i = 0; i < calculationResults.sessions.length; i++) {
-                    const session = calculationResults.sessions[i];
+                for (var i = 0; i < calculationResults.sessions.length; i++) {
+                    var session = calculationResults.sessions[i];
                     
-                    // Insert session
-                    const { data: sessionData, error: sessionError } = await supabase
+                    var sessionResult = await supabase
                         .from('sessions')
                         .insert([{
                             session_date: session.date,
@@ -1345,35 +1724,32 @@
                         }])
                         .select();
 
-                    if (sessionError) throw sessionError;
+                    if (sessionResult.error) throw sessionResult.error;
 
-                    const sessionId = sessionData[0].id;
+                    var sessionId = sessionResult.data[0].id;
 
-                    // 2. Save attendance for each player in this session
-                    for (let j = 0; j < session.players.length; j++) {
-                        const player = session.players[j];
-                        
-                        // First ensure player exists in database
-                        let playerId = player.id;
+                    for (var j = 0; j < session.players.length; j++) {
+                        var player = session.players[j];
+                        var playerId = player.id;
                         
                         if (!playerId) {
-                            // Try to find existing player or create new one
-                            const { data: existingPlayer } = await supabase
+                            var existingResult = await supabase
                                 .from('players')
                                 .select('id')
                                 .ilike('name', player.name)
                                 .single();
 
-                            if (existingPlayer) {
-                                playerId = existingPlayer.id;
+                            if (existingResult.data) {
+                                playerId = existingResult.data.id;
                             } else {
-                                const { data: newPlayer, error: playerError } = await supabase
+                                var newPlayerResult = await supabase
                                     .from('players')
                                     .insert([{ name: player.name }])
                                     .select();
                                 
-                                if (playerError && playerError.code !== '23505') throw playerError;
-                                if (newPlayer && newPlayer[0]) playerId = newPlayer[0].id;
+                                if (newPlayerResult.data && newPlayerResult.data[0]) {
+                                    playerId = newPlayerResult.data[0].id;
+                                }
                             }
                         }
 
@@ -1389,7 +1765,6 @@
                     }
                 }
 
-                // 3. Save calculation history
                 await supabase
                     .from('calculation_history')
                     .insert([{
@@ -1399,11 +1774,11 @@
                         breakdown: calculationResults
                     }]);
 
-                showToast('Saved to database successfully!');
+                showToast('Saved successfully!');
                 btn.innerHTML = '✓ Saved!';
-                btn.style.background = '#059669';
+                bottomBtn.innerHTML = '✓ Saved!';
+                btn.style.background = 'var(--success)';
                 
-                // Reload data
                 await loadPlayers();
                 await loadLocations();
                 await loadHistory();
@@ -1412,7 +1787,9 @@
                 console.error('Error saving to database:', error);
                 showToast('Error saving: ' + error.message);
                 btn.innerHTML = '💾 Save to Database';
+                bottomBtn.innerHTML = 'Confirm RSVP & Save';
                 btn.disabled = false;
+                bottomBtn.disabled = false;
             }
         }
 
@@ -1428,17 +1805,17 @@
             }
             
             try {
-                const { data, error } = await supabase
+                var result = await supabase
                     .from('calculation_history')
                     .select('*')
                     .order('calculation_date', { ascending: false })
                     .limit(20);
                 
-                if (error) throw error;
+                if (result.error) throw result.error;
                 
-                const container = document.getElementById('history-container');
+                var container = document.getElementById('history-container');
                 
-                if (!data || data.length === 0) {
+                if (!result.data || result.data.length === 0) {
                     container.innerHTML = 
                         '<div class="empty-state">' +
                             '<div class="icon">📜</div>' +
@@ -1447,15 +1824,14 @@
                     return;
                 }
                 
-                // Store for detail view
-                historyData = data;
+                historyData = result.data;
                 
                 container.innerHTML = '';
-                data.forEach(function(item, index) {
-                    const date = new Date(item.calculation_date);
-                    let locations = 'N/A';
+                result.data.forEach(function(item, index) {
+                    var date = new Date(item.calculation_date);
+                    var locations = 'N/A';
                     if (item.breakdown && item.breakdown.sessions) {
-                        const uniqueLocs = [];
+                        var uniqueLocs = [];
                         item.breakdown.sessions.forEach(function(s) {
                             if (s.location && uniqueLocs.indexOf(s.location) === -1) {
                                 uniqueLocs.push(s.location);
@@ -1464,21 +1840,19 @@
                         locations = uniqueLocs.join(', ');
                     }
                     
-                    const historyItem = document.createElement('div');
+                    var historyItem = document.createElement('div');
                     historyItem.className = 'history-item';
                     historyItem.onclick = function() { viewHistoryDetail(index); };
                     historyItem.innerHTML = 
-                        '<div class="history-item-header">' +
+                        '<div class="history-header">' +
                             '<div>' +
-                                '<strong>' + date.toLocaleDateString() + '</strong>' +
-                                '<div class="date">' + date.toLocaleTimeString() + '</div>' +
-                                '<div class="location">📍 ' + locations + '</div>' +
+                                '<div class="history-date">' + date.toLocaleDateString() + '</div>' +
+                                '<div class="history-time">' + date.toLocaleTimeString() + '</div>' +
                             '</div>' +
-                            '<div class="amount">' + currency + ' ' + item.total_cost.toFixed(2) + '</div>' +
+                            '<div class="history-amount">' + currency + ' ' + item.total_cost.toFixed(2) + '</div>' +
                         '</div>' +
-                        '<div style="font-size: 0.8rem; color: #6b7280; margin-top: 4px;">' +
-                            item.total_sessions + ' session(s), ' + item.total_players + ' players' +
-                        '</div>';
+                        '<div class="history-location">📍 ' + locations + '</div>' +
+                        '<div class="history-meta">' + item.total_sessions + ' session(s) • ' + item.total_players + ' players</div>';
                     container.appendChild(historyItem);
                 });
                 
@@ -1495,11 +1869,10 @@
         function viewHistoryDetail(index) {
             if (!historyData || !historyData[index]) return;
             
-            const item = historyData[index];
+            var item = historyData[index];
             calculationResults = item.breakdown;
             displayResults(calculationResults);
             
-            // Hide save button for historical data
             document.getElementById('save-btn').style.display = 'none';
             
             showTab('results', document.getElementById('tab-results'));
@@ -1507,10 +1880,10 @@
 
         // ============ SHARING ============
         function generatePlayerMessage(playerName) {
-            const data = calculationResults.playerTotals[playerName];
+            var data = calculationResults.playerTotals[playerName];
             if (!data) return '';
             
-            let message = '🏸 Badminton Cost Share 🏸\n\n';
+            var message = '🏸 Badminton Cost Share 🏸\n\n';
             message += 'Hi ' + playerName + '! 👋\n\n';
             message += 'Your total: ' + currency + ' ' + data.total.toFixed(2) + '\n\n';
             message += '📋 Breakdown:\n';
@@ -1526,7 +1899,7 @@
         }
 
         function sharePlayerResult(playerName) {
-            const message = generatePlayerMessage(playerName);
+            var message = generatePlayerMessage(playerName);
             
             if (navigator.share) {
                 navigator.share({
@@ -1543,16 +1916,15 @@
         function shareAllResults() {
             if (!calculationResults) return;
             
-            // Get unique locations
-            const uniqueLocs = [];
+            var uniqueLocs = [];
             calculationResults.sessions.forEach(function(s) {
                 if (s.location && uniqueLocs.indexOf(s.location) === -1) {
                     uniqueLocs.push(s.location);
                 }
             });
-            const locations = uniqueLocs.join(', ');
+            var locations = uniqueLocs.join(', ');
             
-            let message = '🏸 Badminton Cost Share - Summary 🏸\n\n';
+            var message = '🏸 Badminton Cost Share - Summary 🏸\n\n';
             message += '📍 Location(s): ' + locations + '\n';
             message += '📊 Total Court Cost: ' + currency + ' ' + calculationResults.totalCost.toFixed(2) + '\n';
             message += '👥 Players: ' + calculationResults.totalPlayers + '\n';
@@ -1582,7 +1954,7 @@
         function copyToClipboard(text) {
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(text).then(function() {
-                    showToast('Message copied to clipboard!');
+                    showToast('Message copied!');
                 }).catch(function() {
                     fallbackCopyToClipboard(text);
                 });
@@ -1592,7 +1964,7 @@
         }
 
         function fallbackCopyToClipboard(text) {
-            const textarea = document.createElement('textarea');
+            var textarea = document.createElement('textarea');
             textarea.value = text;
             textarea.style.position = 'fixed';
             textarea.style.left = '-9999px';
@@ -1600,7 +1972,7 @@
             textarea.select();
             try {
                 document.execCommand('copy');
-                showToast('Message copied to clipboard!');
+                showToast('Message copied!');
             } catch (e) {
                 showToast('Could not copy message');
             }
@@ -1608,7 +1980,7 @@
         }
 
         function showToast(message) {
-            const toast = document.getElementById('toast');
+            var toast = document.getElementById('toast');
             toast.textContent = message;
             toast.classList.add('show');
             setTimeout(function() {
@@ -1618,7 +1990,7 @@
 
         // ============ RESET APP ============
         function resetApp() {
-            if (confirm('This will clear all local settings including Supabase credentials. Continue?')) {
+            if (confirm('This will clear all local settings. Continue?')) {
                 localStorage.removeItem('supabase-url');
                 localStorage.removeItem('supabase-key');
                 location.reload();

@@ -16,6 +16,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -118,6 +119,8 @@
             padding: 6px 12px;
             font-size: 0.8rem;
             cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
         }
 
         .input-group {
@@ -136,8 +139,11 @@
             padding: 12px;
             border: 2px solid #e5e7eb;
             border-radius: 10px;
-            font-size: 1rem;
+            font-size: 16px; /* Prevents zoom on iOS */
             transition: border-color 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+            background: white;
         }
 
         .input-group input:focus, .input-group select:focus {
@@ -173,14 +179,16 @@
             cursor: pointer;
             font-weight: bold;
             opacity: 0.7;
+            padding: 2px 6px;
         }
 
-        .player-tag .remove:hover {
+        .player-tag .remove:hover,
+        .player-tag .remove:active {
             opacity: 1;
         }
 
         .btn {
-            padding: 12px 20px;
+            padding: 14px 20px;
             border: none;
             border-radius: 10px;
             font-size: 1rem;
@@ -191,6 +199,9 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            -webkit-appearance: none;
+            appearance: none;
+            touch-action: manipulation;
         }
 
         .btn:active {
@@ -231,13 +242,17 @@
         }
 
         .add-player-row button {
-            padding: 12px 16px;
+            padding: 12px 20px;
             background: #4f46e5;
             color: white;
             border: none;
             border-radius: 10px;
             font-weight: bold;
+            font-size: 18px;
             cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            touch-action: manipulation;
         }
 
         /* Results Section */
@@ -284,11 +299,14 @@
             background: #10b981;
             color: white;
             border: none;
-            padding: 8px 12px;
+            padding: 10px 14px;
             border-radius: 8px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             cursor: pointer;
             margin-top: 8px;
+            -webkit-appearance: none;
+            appearance: none;
+            touch-action: manipulation;
         }
 
         .summary-stats {
@@ -327,13 +345,17 @@
             background: #fef3c7;
             color: #92400e;
             border: none;
-            padding: 6px 12px;
+            padding: 8px 14px;
             border-radius: 16px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            touch-action: manipulation;
         }
 
-        .quick-add-btn:hover {
+        .quick-add-btn:hover,
+        .quick-add-btn:active {
             background: #fde68a;
         }
 
@@ -351,13 +373,14 @@
             opacity: 0;
             transition: opacity 0.3s;
             z-index: 1000;
+            pointer-events: none;
         }
 
         .toast.show {
             opacity: 1;
         }
 
-        /* Tabs */
+        /* Tabs - FIXED */
         .tabs {
             display: flex;
             gap: 8px;
@@ -366,7 +389,7 @@
 
         .tab {
             flex: 1;
-            padding: 12px;
+            padding: 14px 8px;
             border: none;
             border-radius: 10px;
             font-size: 0.85rem;
@@ -374,6 +397,15 @@
             cursor: pointer;
             background: rgba(255, 255, 255, 0.2);
             color: white;
+            -webkit-appearance: none;
+            appearance: none;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .tab:active {
+            opacity: 0.8;
         }
 
         .tab.active {
@@ -409,9 +441,11 @@
             margin-bottom: 8px;
             cursor: pointer;
             transition: background 0.2s;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .history-item:hover {
+        .history-item:hover,
+        .history-item:active {
             background: #f3f4f6;
         }
 
@@ -452,11 +486,12 @@
         }
 
         .location-suggestion {
-            padding: 10px 12px;
+            padding: 12px;
             cursor: pointer;
         }
 
-        .location-suggestion:hover {
+        .location-suggestion:hover,
+        .location-suggestion:active {
             background: #f3f4f6;
         }
 
@@ -479,29 +514,45 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Audit details */
-        .audit-details {
-            background: #f9fafb;
-            border-radius: 10px;
-            padding: 12px;
-            margin-top: 12px;
+        /* Settings card */
+        .settings-input {
+            margin-bottom: 16px;
+        }
+
+        .settings-input label {
+            display: block;
             font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 6px;
         }
 
-        .audit-details h4 {
-            color: #374151;
-            margin-bottom: 8px;
+        .settings-input input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 16px;
+            -webkit-appearance: none;
+            appearance: none;
         }
 
-        .audit-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 0;
-            border-bottom: 1px solid #e5e7eb;
+        .settings-input input:focus {
+            outline: none;
+            border-color: #4f46e5;
         }
 
-        .audit-row:last-child {
-            border-bottom: none;
+        .settings-saved {
+            color: #059669;
+            font-size: 0.85rem;
+            margin-top: 12px;
+            padding: 10px;
+            background: #ecfdf5;
+            border-radius: 8px;
+        }
+
+        .settings-saved.error {
+            color: #dc2626;
+            background: #fef2f2;
         }
 
         @media (max-width: 380px) {
@@ -514,32 +565,10 @@
             .input-row {
                 grid-template-columns: 1fr;
             }
-        }
-
-        /* Settings card */
-        .settings-input {
-            margin-bottom: 12px;
-        }
-
-        .settings-input label {
-            display: block;
-            font-size: 0.85rem;
-            color: #6b7280;
-            margin-bottom: 4px;
-        }
-
-        .settings-input input {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 0.9rem;
-        }
-
-        .settings-saved {
-            color: #059669;
-            font-size: 0.85rem;
-            margin-top: 8px;
+            .tab {
+                padding: 12px 4px;
+                font-size: 0.75rem;
+            }
         }
     </style>
 </head>
@@ -555,10 +584,10 @@
         </header>
 
         <div class="tabs">
-            <button class="tab active" onclick="showTab('input')">📝 Input</button>
-            <button class="tab" onclick="showTab('results')">💰 Results</button>
-            <button class="tab" onclick="showTab('history')">📜 History</button>
-            <button class="tab" onclick="showTab('settings')">⚙️</button>
+            <button class="tab active" id="tab-input" onclick="showTab('input', this)">📝 Input</button>
+            <button class="tab" id="tab-results" onclick="showTab('results', this)">💰 Results</button>
+            <button class="tab" id="tab-history" onclick="showTab('history', this)">📜 History</button>
+            <button class="tab" id="tab-settings" onclick="showTab('settings', this)">⚙️</button>
         </div>
 
         <!-- INPUT TAB -->
@@ -658,7 +687,7 @@
                 
                 <div class="settings-input">
                     <label>Supabase Anon Key</label>
-                    <input type="password" id="supabase-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6...">
+                    <input type="text" id="supabase-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6...">
                 </div>
                 
                 <button class="btn btn-primary" onclick="saveSupabaseConfig()">
@@ -671,7 +700,7 @@
             <div class="card">
                 <h2>📍 Saved Locations</h2>
                 <div id="saved-locations">
-                    <span style="color: #9ca3af; font-size: 0.85rem;">Loading locations...</span>
+                    <span style="color: #9ca3af; font-size: 0.85rem;">Connect to Supabase to see locations</span>
                 </div>
             </div>
 
@@ -685,8 +714,15 @@
                     </div>
                 </div>
                 <div id="all-players-list" style="margin-top: 12px;">
-                    <span style="color: #9ca3af; font-size: 0.85rem;">Loading players...</span>
+                    <span style="color: #9ca3af; font-size: 0.85rem;">Connect to Supabase to manage players</span>
                 </div>
+            </div>
+
+            <div class="card">
+                <h2>🔄 Reset App</h2>
+                <button class="btn btn-secondary" onclick="resetApp()" style="background: #fee2e2; color: #dc2626;">
+                    🗑️ Clear All Local Data
+                </button>
             </div>
         </div>
     </div>
@@ -701,12 +737,39 @@
         let allPlayers = [];
         let savedLocations = [];
         let calculationResults = null;
+        let historyData = [];
 
         // ============ INITIALIZATION ============
-        document.addEventListener('DOMContentLoaded', async () => {
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('App initializing...');
             loadSupabaseConfig();
             addSession(); // Start with one session
         });
+
+        // ============ TAB NAVIGATION - FIXED ============
+        function showTab(tabName, clickedTab) {
+            console.log('Switching to tab:', tabName);
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(function(tab) {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab contents
+            document.querySelectorAll('.tab-content').forEach(function(content) {
+                content.classList.remove('active');
+            });
+            
+            // Add active class to clicked tab
+            if (clickedTab) {
+                clickedTab.classList.add('active');
+            } else {
+                document.getElementById('tab-' + tabName).classList.add('active');
+            }
+            
+            // Show the corresponding tab content
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
 
         // ============ SUPABASE CONFIG ============
         function loadSupabaseConfig() {
@@ -719,6 +782,8 @@
                 initializeSupabase(url, key);
             } else {
                 updateConnectionStatus('disconnected', 'Not configured');
+                document.getElementById('quick-add-players').innerHTML = 
+                    '<span style="color: #9ca3af; font-size: 0.85rem;">Configure Supabase in Settings ⚙️</span>';
             }
         }
 
@@ -740,17 +805,25 @@
         async function initializeSupabase(url, key) {
             try {
                 updateConnectionStatus('connecting', 'Connecting...');
+                console.log('Connecting to Supabase...');
                 
                 supabase = window.supabase.createClient(url, key);
                 
                 // Test connection by fetching players
                 const { data, error } = await supabase.from('players').select('*').limit(1);
                 
-                if (error) throw error;
+                if (error) {
+                    console.error('Supabase error:', error);
+                    throw error;
+                }
                 
+                console.log('Connected to Supabase!');
                 updateConnectionStatus('connected', 'Connected');
-                document.getElementById('settings-status').textContent = '✓ Connected successfully!';
-                document.getElementById('settings-status').style.display = 'block';
+                
+                const statusEl = document.getElementById('settings-status');
+                statusEl.textContent = '✓ Connected successfully!';
+                statusEl.className = 'settings-saved';
+                statusEl.style.display = 'block';
                 
                 // Load data
                 await loadPlayers();
@@ -760,9 +833,11 @@
             } catch (error) {
                 console.error('Supabase connection error:', error);
                 updateConnectionStatus('error', 'Connection failed');
-                document.getElementById('settings-status').textContent = '✗ Connection failed: ' + error.message;
-                document.getElementById('settings-status').style.color = '#dc2626';
-                document.getElementById('settings-status').style.display = 'block';
+                
+                const statusEl = document.getElementById('settings-status');
+                statusEl.textContent = '✗ Connection failed: ' + error.message;
+                statusEl.className = 'settings-saved error';
+                statusEl.style.display = 'block';
             }
         }
 
@@ -772,7 +847,7 @@
             
             dot.className = 'status-dot';
             if (status === 'connected') dot.classList.add('connected');
-            if (status === 'error') dot.classList.add('error');
+            if (status === 'error' || status === 'disconnected') dot.classList.add('error');
             
             statusText.textContent = text;
         }
@@ -782,6 +857,7 @@
             if (!supabase) return;
             
             try {
+                console.log('Loading players...');
                 const { data, error } = await supabase
                     .from('players')
                     .select('*')
@@ -790,6 +866,7 @@
                 if (error) throw error;
                 
                 allPlayers = data || [];
+                console.log('Loaded players:', allPlayers.length);
                 updateQuickAddButtons();
                 updatePlayersListInSettings();
                 
@@ -803,13 +880,20 @@
             const container = document.getElementById('quick-add-players');
             
             if (allPlayers.length === 0) {
-                container.innerHTML = '<span style="color: #9ca3af; font-size: 0.85rem;">No players yet. Add some in Settings.</span>';
+                container.innerHTML = '<span style="color: #9ca3af; font-size: 0.85rem;">No players yet. Add some in Settings ⚙️</span>';
                 return;
             }
             
-            container.innerHTML = allPlayers.map(player => 
-                `<button class="quick-add-btn" onclick="addPlayerToCurrentSession('${player.id}', '${player.name}')">${player.name}</button>`
-            ).join('');
+            container.innerHTML = '';
+            allPlayers.forEach(function(player) {
+                const btn = document.createElement('button');
+                btn.className = 'quick-add-btn';
+                btn.textContent = player.name;
+                btn.onclick = function() {
+                    addPlayerToCurrentSession(player.id, player.name);
+                };
+                container.appendChild(btn);
+            });
         }
 
         function updatePlayersListInSettings() {
@@ -820,13 +904,18 @@
                 return;
             }
             
-            container.innerHTML = `
-                <div class="player-tags">
-                    ${allPlayers.map(player => 
-                        `<span class="player-tag">${player.name} <span class="remove" onclick="deletePlayer('${player.id}')">×</span></span>`
-                    ).join('')}
-                </div>
-            `;
+            const tagsDiv = document.createElement('div');
+            tagsDiv.className = 'player-tags';
+            
+            allPlayers.forEach(function(player) {
+                const tag = document.createElement('span');
+                tag.className = 'player-tag';
+                tag.innerHTML = player.name + ' <span class="remove" onclick="deletePlayer(\'' + player.id + '\')">×</span>';
+                tagsDiv.appendChild(tag);
+            });
+            
+            container.innerHTML = '';
+            container.appendChild(tagsDiv);
         }
 
         async function addNewPlayerToDatabase() {
@@ -901,7 +990,13 @@
                 if (error) throw error;
                 
                 // Get unique locations
-                savedLocations = [...new Set(data.map(s => s.court_location))];
+                const uniqueLocations = [];
+                (data || []).forEach(function(s) {
+                    if (s.court_location && uniqueLocations.indexOf(s.court_location) === -1) {
+                        uniqueLocations.push(s.court_location);
+                    }
+                });
+                savedLocations = uniqueLocations;
                 updateLocationsInSettings();
                 
             } catch (error) {
@@ -917,118 +1012,131 @@
                 return;
             }
             
-            container.innerHTML = `
-                <div class="player-tags">
-                    ${savedLocations.map(loc => 
-                        `<span class="player-tag">📍 ${loc}</span>`
-                    ).join('')}
-                </div>
-            `;
+            const tagsDiv = document.createElement('div');
+            tagsDiv.className = 'player-tags';
+            
+            savedLocations.forEach(function(loc) {
+                const tag = document.createElement('span');
+                tag.className = 'player-tag';
+                tag.textContent = '📍 ' + loc;
+                tagsDiv.appendChild(tag);
+            });
+            
+            container.innerHTML = '';
+            container.appendChild(tagsDiv);
         }
 
         // ============ SESSIONS (UI) ============
-        function showTab(tabName) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            
-            event.target.classList.add('active');
-            document.getElementById(`${tabName}-tab`).classList.add('active');
-        }
-
         function addSession() {
             sessionCounter++;
             const container = document.getElementById('sessions-container');
             
             const today = new Date().toISOString().split('T')[0];
+            const sessionNum = sessionCounter;
             
             const sessionDiv = document.createElement('div');
             sessionDiv.className = 'session-container';
-            sessionDiv.id = `session-${sessionCounter}`;
-            sessionDiv.innerHTML = `
-                <div class="session-header">
-                    <h3>Session ${sessionCounter}</h3>
-                    <button class="delete-session" onclick="deleteSession(${sessionCounter})">🗑️ Remove</button>
-                </div>
+            sessionDiv.id = 'session-' + sessionNum;
+            sessionDiv.innerHTML = 
+                '<div class="session-header">' +
+                    '<h3>Session ' + sessionNum + '</h3>' +
+                    '<button class="delete-session" onclick="deleteSession(' + sessionNum + ')">🗑️ Remove</button>' +
+                '</div>' +
                 
-                <div class="input-row">
-                    <div class="input-group">
-                        <label>Date</label>
-                        <input type="date" id="date-${sessionCounter}" value="${today}">
-                    </div>
-                    <div class="input-group">
-                        <label>Court Cost (AED)</label>
-                        <input type="number" id="cost-${sessionCounter}" placeholder="0.00" inputmode="decimal">
-                    </div>
-                </div>
+                '<div class="input-row">' +
+                    '<div class="input-group">' +
+                        '<label>Date</label>' +
+                        '<input type="date" id="date-' + sessionNum + '" value="' + today + '">' +
+                    '</div>' +
+                    '<div class="input-group">' +
+                        '<label>Court Cost (AED)</label>' +
+                        '<input type="number" id="cost-' + sessionNum + '" placeholder="0.00" inputmode="decimal" step="0.01">' +
+                    '</div>' +
+                '</div>' +
                 
-                <div class="input-group">
-                    <label>Court Location</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="location-${sessionCounter}" placeholder="Enter court location..." 
-                               onfocus="showLocationSuggestions(${sessionCounter})" 
-                               onblur="hideLocationSuggestions(${sessionCounter})"
-                               oninput="filterLocationSuggestions(${sessionCounter})">
-                        <div class="location-suggestions" id="location-suggestions-${sessionCounter}" style="display: none;"></div>
-                    </div>
-                </div>
+                '<div class="input-group">' +
+                    '<label>Court Location</label>' +
+                    '<div class="input-wrapper">' +
+                        '<input type="text" id="location-' + sessionNum + '" placeholder="Enter court location..." ' +
+                               'onfocus="showLocationSuggestions(' + sessionNum + ')" ' +
+                               'onblur="hideLocationSuggestions(' + sessionNum + ')" ' +
+                               'oninput="filterLocationSuggestions(' + sessionNum + ')">' +
+                        '<div class="location-suggestions" id="location-suggestions-' + sessionNum + '" style="display: none;"></div>' +
+                    '</div>' +
+                '</div>' +
                 
-                <div class="input-group">
-                    <label>Players (press Enter or + to add)</label>
-                    <div class="add-player-row">
-                        <input type="text" id="player-input-${sessionCounter}" placeholder="Enter player name..." 
-                               onkeypress="handlePlayerInput(event, ${sessionCounter})"
-                               list="players-datalist">
-                        <button onclick="addPlayerToSession(${sessionCounter})">+</button>
-                    </div>
-                    <div class="player-tags" id="players-${sessionCounter}"></div>
-                </div>
-            `;
+                '<div class="input-group">' +
+                    '<label>Players (press Enter or + to add)</label>' +
+                    '<div class="add-player-row">' +
+                        '<input type="text" id="player-input-' + sessionNum + '" placeholder="Enter player name..." ' +
+                               'onkeypress="handlePlayerInput(event, ' + sessionNum + ')">' +
+                        '<button onclick="addPlayerToSession(' + sessionNum + ')">+</button>' +
+                    '</div>' +
+                    '<div class="player-tags" id="players-' + sessionNum + '"></div>' +
+                '</div>';
             
             container.appendChild(sessionDiv);
         }
 
         function deleteSession(sessionNum) {
-            const sessionDiv = document.getElementById(`session-${sessionNum}`);
+            const sessionDiv = document.getElementById('session-' + sessionNum);
             if (sessionDiv) {
                 sessionDiv.remove();
             }
         }
 
         function showLocationSuggestions(sessionNum) {
-            const container = document.getElementById(`location-suggestions-${sessionNum}`);
+            const container = document.getElementById('location-suggestions-' + sessionNum);
             if (savedLocations.length === 0) return;
             
-            container.innerHTML = savedLocations.map(loc => 
-                `<div class="location-suggestion" onmousedown="selectLocation(${sessionNum}, '${loc}')">${loc}</div>`
-            ).join('');
+            container.innerHTML = '';
+            savedLocations.forEach(function(loc) {
+                const div = document.createElement('div');
+                div.className = 'location-suggestion';
+                div.textContent = loc;
+                div.onmousedown = function() {
+                    selectLocation(sessionNum, loc);
+                };
+                container.appendChild(div);
+            });
             container.style.display = 'block';
         }
 
         function hideLocationSuggestions(sessionNum) {
-            setTimeout(() => {
-                document.getElementById(`location-suggestions-${sessionNum}`).style.display = 'none';
+            setTimeout(function() {
+                var el = document.getElementById('location-suggestions-' + sessionNum);
+                if (el) el.style.display = 'none';
             }, 200);
         }
 
         function filterLocationSuggestions(sessionNum) {
-            const input = document.getElementById(`location-${sessionNum}`).value.toLowerCase();
-            const container = document.getElementById(`location-suggestions-${sessionNum}`);
+            const input = document.getElementById('location-' + sessionNum).value.toLowerCase();
+            const container = document.getElementById('location-suggestions-' + sessionNum);
             
-            const filtered = savedLocations.filter(loc => loc.toLowerCase().includes(input));
+            const filtered = savedLocations.filter(function(loc) {
+                return loc.toLowerCase().indexOf(input) !== -1;
+            });
             
             if (filtered.length === 0) {
                 container.style.display = 'none';
                 return;
             }
             
-            container.innerHTML = filtered.map(loc => 
-                `<div class="location-suggestion" onmousedown="selectLocation(${sessionNum}, '${loc}')">${loc}</div>`
-            ).join('');
+            container.innerHTML = '';
+            filtered.forEach(function(loc) {
+                const div = document.createElement('div');
+                div.className = 'location-suggestion';
+                div.textContent = loc;
+                div.onmousedown = function() {
+                    selectLocation(sessionNum, loc);
+                };
+                container.appendChild(div);
+            });
             container.style.display = 'block';
         }
 
         function selectLocation(sessionNum, location) {
-            document.getElementById(`location-${sessionNum}`).value = location;
+            document.getElementById('location-' + sessionNum).value = location;
         }
 
         // ============ PLAYER MANAGEMENT IN SESSION ============
@@ -1039,18 +1147,18 @@
             }
         }
 
-        function addPlayerToSession(sessionNum, playerId = null, playerName = null) {
-            const input = document.getElementById(`player-input-${sessionNum}`);
-            const name = playerName || input.value.trim();
+        function addPlayerToSession(sessionNum, playerId, playerName) {
+            const input = document.getElementById('player-input-' + sessionNum);
+            const name = playerName || (input ? input.value.trim() : '');
             
             if (!name) return;
             
-            const container = document.getElementById(`players-${sessionNum}`);
+            const container = document.getElementById('players-' + sessionNum);
             
             // Check if player already exists in this session
             const existingTags = container.querySelectorAll('.player-tag');
-            for (let tag of existingTags) {
-                if (tag.dataset.name.toLowerCase() === name.toLowerCase()) {
+            for (var i = 0; i < existingTags.length; i++) {
+                if (existingTags[i].dataset.name.toLowerCase() === name.toLowerCase()) {
                     showToast('Player already added to this session!');
                     if (input) input.value = '';
                     return;
@@ -1059,15 +1167,19 @@
             
             // Find player ID if not provided
             if (!playerId) {
-                const existingPlayer = allPlayers.find(p => p.name.toLowerCase() === name.toLowerCase());
-                playerId = existingPlayer ? existingPlayer.id : null;
+                for (var j = 0; j < allPlayers.length; j++) {
+                    if (allPlayers[j].name.toLowerCase() === name.toLowerCase()) {
+                        playerId = allPlayers[j].id;
+                        break;
+                    }
+                }
             }
             
             const tag = document.createElement('span');
             tag.className = 'player-tag';
             tag.dataset.name = name;
             tag.dataset.id = playerId || '';
-            tag.innerHTML = `${name} <span class="remove" onclick="this.parentElement.remove()">×</span>`;
+            tag.innerHTML = name + ' <span class="remove" onclick="this.parentElement.remove()">×</span>';
             container.appendChild(tag);
             
             if (input) input.value = '';
@@ -1088,16 +1200,19 @@
             const sessions = [];
             const sessionContainers = document.querySelectorAll('.session-container');
             
-            sessionContainers.forEach((container, index) => {
+            sessionContainers.forEach(function(container, index) {
                 const sessionNum = container.id.split('-')[1];
-                const date = document.getElementById(`date-${sessionNum}`).value;
-                const cost = parseFloat(document.getElementById(`cost-${sessionNum}`).value) || 0;
-                const location = document.getElementById(`location-${sessionNum}`).value.trim();
-                const playerTags = container.querySelectorAll(`#players-${sessionNum} .player-tag`);
-                const players = Array.from(playerTags).map(tag => ({
-                    id: tag.dataset.id,
-                    name: tag.dataset.name
-                }));
+                const date = document.getElementById('date-' + sessionNum).value;
+                const cost = parseFloat(document.getElementById('cost-' + sessionNum).value) || 0;
+                const location = document.getElementById('location-' + sessionNum).value.trim();
+                const playerTags = container.querySelectorAll('#players-' + sessionNum + ' .player-tag');
+                const players = [];
+                playerTags.forEach(function(tag) {
+                    players.push({
+                        id: tag.dataset.id,
+                        name: tag.dataset.name
+                    });
+                });
                 
                 if (cost > 0 && players.length > 0) {
                     sessions.push({
@@ -1119,8 +1234,8 @@
             // Calculate totals per player
             const playerTotals = {};
             
-            sessions.forEach(session => {
-                session.players.forEach(player => {
+            sessions.forEach(function(session) {
+                session.players.forEach(function(player) {
                     if (!playerTotals[player.name]) {
                         playerTotals[player.name] = {
                             id: player.id,
@@ -1144,7 +1259,7 @@
             calculationResults = {
                 sessions: sessions,
                 playerTotals: playerTotals,
-                totalCost: sessions.reduce((sum, s) => sum + s.cost, 0),
+                totalCost: sessions.reduce(function(sum, s) { return sum + s.cost; }, 0),
                 totalPlayers: Object.keys(playerTotals).length,
                 totalSessions: sessions.length,
                 calculatedAt: new Date().toISOString()
@@ -1157,13 +1272,13 @@
                 document.getElementById('save-btn').style.display = 'block';
             }
             
-            showTab('results');
-            document.querySelectorAll('.tab')[1].click();
+            // Switch to results tab
+            showTab('results', document.getElementById('tab-results'));
         }
 
         function displayResults(results) {
             // Update summary
-            document.getElementById('total-cost').textContent = `${currency} ${results.totalCost.toFixed(2)}`;
+            document.getElementById('total-cost').textContent = currency + ' ' + results.totalCost.toFixed(2);
             document.getElementById('total-players').textContent = results.totalPlayers;
             document.getElementById('total-sessions').textContent = results.totalSessions;
 
@@ -1173,31 +1288,31 @@
 
             // Sort players by amount owed (descending)
             const sortedPlayers = Object.values(results.playerTotals)
-                .sort((a, b) => b.total - a.total);
+                .sort(function(a, b) { return b.total - a.total; });
 
-            sortedPlayers.forEach(player => {
+            sortedPlayers.forEach(function(player) {
                 const div = document.createElement('div');
                 div.className = 'player-result';
                 
-                let breakdownHTML = player.breakdown.map(b => 
-                    `<div>
-                        <span>${b.date} @ ${b.location}</span>
-                        <span>${currency} ${b.amount.toFixed(2)}</span>
-                    </div>`
-                ).join('');
+                let breakdownHTML = '';
+                player.breakdown.forEach(function(b) {
+                    breakdownHTML += '<div>' +
+                        '<span>' + b.date + ' @ ' + b.location + '</span>' +
+                        '<span>' + currency + ' ' + b.amount.toFixed(2) + '</span>' +
+                    '</div>';
+                });
 
-                div.innerHTML = `
-                    <div class="player-result-header">
-                        <h4>${player.name}</h4>
-                        <span class="total">${currency} ${player.total.toFixed(2)}</span>
-                    </div>
-                    <div class="player-breakdown">
-                        ${breakdownHTML}
-                    </div>
-                    <button class="share-btn" onclick="sharePlayerResult('${player.name}')">
-                        📱 Share Message
-                    </button>
-                `;
+                div.innerHTML = 
+                    '<div class="player-result-header">' +
+                        '<h4>' + player.name + '</h4>' +
+                        '<span class="total">' + currency + ' ' + player.total.toFixed(2) + '</span>' +
+                    '</div>' +
+                    '<div class="player-breakdown">' +
+                        breakdownHTML +
+                    '</div>' +
+                    '<button class="share-btn" onclick="sharePlayerResult(\'' + player.name.replace(/'/g, "\\'") + '\')">' +
+                        '📱 Share Message' +
+                    '</button>';
                 container.appendChild(div);
             });
         }
@@ -1215,7 +1330,9 @@
 
             try {
                 // 1. Save each session
-                for (const session of calculationResults.sessions) {
+                for (let i = 0; i < calculationResults.sessions.length; i++) {
+                    const session = calculationResults.sessions[i];
+                    
                     // Insert session
                     const { data: sessionData, error: sessionError } = await supabase
                         .from('sessions')
@@ -1233,7 +1350,9 @@
                     const sessionId = sessionData[0].id;
 
                     // 2. Save attendance for each player in this session
-                    for (const player of session.players) {
+                    for (let j = 0; j < session.players.length; j++) {
+                        const player = session.players[j];
+                        
                         // First ensure player exists in database
                         let playerId = player.id;
                         
@@ -1254,7 +1373,7 @@
                                     .select();
                                 
                                 if (playerError && playerError.code !== '23505') throw playerError;
-                                playerId = newPlayer ? newPlayer[0].id : null;
+                                if (newPlayer && newPlayer[0]) playerId = newPlayer[0].id;
                             }
                         }
 
@@ -1282,6 +1401,7 @@
 
                 showToast('Saved to database successfully!');
                 btn.innerHTML = '✓ Saved!';
+                btn.style.background = '#059669';
                 
                 // Reload data
                 await loadPlayers();
@@ -1299,12 +1419,11 @@
         // ============ HISTORY ============
         async function loadHistory() {
             if (!supabase) {
-                document.getElementById('history-container').innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon">⚙️</div>
-                        <p>Configure Supabase in Settings to see history</p>
-                    </div>
-                `;
+                document.getElementById('history-container').innerHTML = 
+                    '<div class="empty-state">' +
+                        '<div class="icon">⚙️</div>' +
+                        '<p>Configure Supabase in Settings to see history</p>' +
+                    '</div>';
                 return;
             }
             
@@ -1320,77 +1439,88 @@
                 const container = document.getElementById('history-container');
                 
                 if (!data || data.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <div class="icon">📜</div>
-                            <p>No calculation history yet</p>
-                        </div>
-                    `;
+                    container.innerHTML = 
+                        '<div class="empty-state">' +
+                            '<div class="icon">📜</div>' +
+                            '<p>No calculation history yet</p>' +
+                        '</div>';
                     return;
                 }
                 
-                container.innerHTML = data.map((item, index) => {
-                    const date = new Date(item.calculation_date);
-                    const locations = item.breakdown.sessions 
-                        ? [...new Set(item.breakdown.sessions.map(s => s.location))].join(', ')
-                        : 'N/A';
-                    
-                    return `
-                        <div class="history-item" onclick="viewHistoryDetail(${index})">
-                            <div class="history-item-header">
-                                <div>
-                                    <strong>${date.toLocaleDateString()}</strong>
-                                    <div class="date">${date.toLocaleTimeString()}</div>
-                                    <div class="location">📍 ${locations}</div>
-                                </div>
-                                <div class="amount">${currency} ${item.total_cost.toFixed(2)}</div>
-                            </div>
-                            <div style="font-size: 0.8rem; color: #6b7280; margin-top: 4px;">
-                                ${item.total_sessions} session(s), ${item.total_players} players
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-                
                 // Store for detail view
-                window.historyData = data;
+                historyData = data;
+                
+                container.innerHTML = '';
+                data.forEach(function(item, index) {
+                    const date = new Date(item.calculation_date);
+                    let locations = 'N/A';
+                    if (item.breakdown && item.breakdown.sessions) {
+                        const uniqueLocs = [];
+                        item.breakdown.sessions.forEach(function(s) {
+                            if (s.location && uniqueLocs.indexOf(s.location) === -1) {
+                                uniqueLocs.push(s.location);
+                            }
+                        });
+                        locations = uniqueLocs.join(', ');
+                    }
+                    
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    historyItem.onclick = function() { viewHistoryDetail(index); };
+                    historyItem.innerHTML = 
+                        '<div class="history-item-header">' +
+                            '<div>' +
+                                '<strong>' + date.toLocaleDateString() + '</strong>' +
+                                '<div class="date">' + date.toLocaleTimeString() + '</div>' +
+                                '<div class="location">📍 ' + locations + '</div>' +
+                            '</div>' +
+                            '<div class="amount">' + currency + ' ' + item.total_cost.toFixed(2) + '</div>' +
+                        '</div>' +
+                        '<div style="font-size: 0.8rem; color: #6b7280; margin-top: 4px;">' +
+                            item.total_sessions + ' session(s), ' + item.total_players + ' players' +
+                        '</div>';
+                    container.appendChild(historyItem);
+                });
                 
             } catch (error) {
                 console.error('Error loading history:', error);
-                document.getElementById('history-container').innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon">❌</div>
-                        <p>Error loading history</p>
-                    </div>
-                `;
+                document.getElementById('history-container').innerHTML = 
+                    '<div class="empty-state">' +
+                        '<div class="icon">❌</div>' +
+                        '<p>Error loading history</p>' +
+                    '</div>';
             }
         }
 
         function viewHistoryDetail(index) {
-            if (!window.historyData || !window.historyData[index]) return;
+            if (!historyData || !historyData[index]) return;
             
-            const item = window.historyData[index];
+            const item = historyData[index];
             calculationResults = item.breakdown;
             displayResults(calculationResults);
             
-            showTab('results');
-            document.querySelectorAll('.tab')[1].click();
+            // Hide save button for historical data
+            document.getElementById('save-btn').style.display = 'none';
+            
+            showTab('results', document.getElementById('tab-results'));
         }
 
         // ============ SHARING ============
         function generatePlayerMessage(playerName) {
             const data = calculationResults.playerTotals[playerName];
-            let message = `🏸 Badminton Cost Share 🏸\n\n`;
-            message += `Hi ${playerName}! 👋\n\n`;
-            message += `Your total: ${currency} ${data.total.toFixed(2)}\n\n`;
-            message += `📋 Breakdown:\n`;
+            if (!data) return '';
             
-            data.breakdown.forEach(b => {
-                message += `• ${b.date} @ ${b.location}\n`;
-                message += `  ${currency} ${b.amount.toFixed(2)} (${b.players} players shared ${currency} ${b.cost.toFixed(2)})\n`;
+            let message = '🏸 Badminton Cost Share 🏸\n\n';
+            message += 'Hi ' + playerName + '! 👋\n\n';
+            message += 'Your total: ' + currency + ' ' + data.total.toFixed(2) + '\n\n';
+            message += '📋 Breakdown:\n';
+            
+            data.breakdown.forEach(function(b) {
+                message += '• ' + b.date + ' @ ' + b.location + '\n';
+                message += '  ' + currency + ' ' + b.amount.toFixed(2) + ' (' + b.players + ' players shared ' + currency + ' ' + b.cost.toFixed(2) + ')\n';
             });
             
-            message += `\nThanks for playing! See you on the court! 🏸`;
+            message += '\nThanks for playing! See you on the court! 🏸';
             
             return message;
         }
@@ -1402,7 +1532,7 @@
                 navigator.share({
                     title: 'Badminton Cost Share',
                     text: message
-                }).catch(err => {
+                }).catch(function() {
                     copyToClipboard(message);
                 });
             } else {
@@ -1414,28 +1544,34 @@
             if (!calculationResults) return;
             
             // Get unique locations
-            const locations = [...new Set(calculationResults.sessions.map(s => s.location))].join(', ');
+            const uniqueLocs = [];
+            calculationResults.sessions.forEach(function(s) {
+                if (s.location && uniqueLocs.indexOf(s.location) === -1) {
+                    uniqueLocs.push(s.location);
+                }
+            });
+            const locations = uniqueLocs.join(', ');
             
-            let message = `🏸 Badminton Cost Share - Summary 🏸\n\n`;
-            message += `📍 Location(s): ${locations}\n`;
-            message += `📊 Total Court Cost: ${currency} ${calculationResults.totalCost.toFixed(2)}\n`;
-            message += `👥 Players: ${calculationResults.totalPlayers}\n`;
-            message += `📅 Sessions: ${calculationResults.totalSessions}\n\n`;
-            message += `💰 Individual Amounts:\n`;
+            let message = '🏸 Badminton Cost Share - Summary 🏸\n\n';
+            message += '📍 Location(s): ' + locations + '\n';
+            message += '📊 Total Court Cost: ' + currency + ' ' + calculationResults.totalCost.toFixed(2) + '\n';
+            message += '👥 Players: ' + calculationResults.totalPlayers + '\n';
+            message += '📅 Sessions: ' + calculationResults.totalSessions + '\n\n';
+            message += '💰 Individual Amounts:\n';
             
             Object.values(calculationResults.playerTotals)
-                .sort((a, b) => b.total - a.total)
-                .forEach(player => {
-                    message += `• ${player.name}: ${currency} ${player.total.toFixed(2)}\n`;
+                .sort(function(a, b) { return b.total - a.total; })
+                .forEach(function(player) {
+                    message += '• ' + player.name + ': ' + currency + ' ' + player.total.toFixed(2) + '\n';
                 });
             
-            message += `\nThanks everyone! See you on the court! 🏸`;
+            message += '\nThanks everyone! See you on the court! 🏸';
             
             if (navigator.share) {
                 navigator.share({
                     title: 'Badminton Cost Share',
                     text: message
-                }).catch(err => {
+                }).catch(function() {
                     copyToClipboard(message);
                 });
             } else {
@@ -1444,24 +1580,49 @@
         }
 
         function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('Message copied to clipboard!');
-            }).catch(err => {
-                const textarea = document.createElement('textarea');
-                textarea.value = text;
-                document.body.appendChild(textarea);
-                textarea.select();
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(function() {
+                    showToast('Message copied to clipboard!');
+                }).catch(function() {
+                    fallbackCopyToClipboard(text);
+                });
+            } else {
+                fallbackCopyToClipboard(text);
+            }
+        }
+
+        function fallbackCopyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
                 document.execCommand('copy');
-                document.body.removeChild(textarea);
                 showToast('Message copied to clipboard!');
-            });
+            } catch (e) {
+                showToast('Could not copy message');
+            }
+            document.body.removeChild(textarea);
         }
 
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.textContent = message;
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+            setTimeout(function() {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ============ RESET APP ============
+        function resetApp() {
+            if (confirm('This will clear all local settings including Supabase credentials. Continue?')) {
+                localStorage.removeItem('supabase-url');
+                localStorage.removeItem('supabase-key');
+                location.reload();
+            }
         }
     </script>
 </body>

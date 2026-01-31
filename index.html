@@ -2,12 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scale=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#4f46e5">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>🏸 Badminton Cost Splitter</title>
-    <link rel="manifest" href="data:application/json,{%22name%22:%22Badminton%20Cost%20Splitter%22,%22short_name%22:%22BadmintonSplit%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22theme_color%22:%22%234f46e5%22,%22background_color%22:%22%23f3f4f6%22}">
+    
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
         * {
             margin: 0;
@@ -44,6 +47,32 @@
             font-size: 0.95rem;
         }
 
+        .connection-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-top: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #fbbf24;
+        }
+
+        .status-dot.connected {
+            background: #34d399;
+        }
+
+        .status-dot.error {
+            background: #f87171;
+        }
+
         .card {
             background: white;
             border-radius: 16px;
@@ -61,7 +90,7 @@
             gap: 8px;
         }
 
-        .week-container {
+        .session-container {
             border: 2px dashed #e5e7eb;
             border-radius: 12px;
             padding: 16px;
@@ -69,19 +98,19 @@
             background: #fafafa;
         }
 
-        .week-header {
+        .session-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 12px;
         }
 
-        .week-header h3 {
+        .session-header h3 {
             color: #374151;
             font-size: 1rem;
         }
 
-        .week-header .delete-week {
+        .session-header .delete-session {
             background: #fee2e2;
             color: #dc2626;
             border: none;
@@ -102,7 +131,7 @@
             margin-bottom: 6px;
         }
 
-        .input-group input {
+        .input-group input, .input-group select {
             width: 100%;
             padding: 12px;
             border: 2px solid #e5e7eb;
@@ -111,9 +140,15 @@
             transition: border-color 0.2s;
         }
 
-        .input-group input:focus {
+        .input-group input:focus, .input-group select:focus {
             outline: none;
             border-color: #4f46e5;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
         }
 
         .player-tags {
@@ -154,6 +189,7 @@
             transition: transform 0.2s, box-shadow 0.2s;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
         }
 
@@ -161,11 +197,15 @@
             transform: scale(0.98);
         }
 
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .btn-primary {
             background: linear-gradient(135deg, #4f46e5, #7c3aed);
             color: white;
             width: 100%;
-            justify-content: center;
             box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
         }
 
@@ -173,12 +213,12 @@
             background: #f3f4f6;
             color: #374151;
             width: 100%;
-            justify-content: center;
         }
 
-        .btn-small {
-            padding: 8px 16px;
-            font-size: 0.85rem;
+        .btn-success {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            width: 100%;
         }
 
         .add-player-row {
@@ -201,14 +241,6 @@
         }
 
         /* Results Section */
-        .results-section {
-            display: none;
-        }
-
-        .results-section.show {
-            display: block;
-        }
-
         .player-result {
             background: #f9fafb;
             border-radius: 12px;
@@ -337,7 +369,7 @@
             padding: 12px;
             border: none;
             border-radius: 10px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
             background: rgba(255, 255, 255, 0.2);
@@ -355,28 +387,6 @@
 
         .tab-content.active {
             display: block;
-        }
-
-        /* Currency selector */
-        .currency-selector {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .currency-btn {
-            padding: 8px 16px;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .currency-btn.active {
-            border-color: #4f46e5;
-            background: #e0e7ff;
-            color: #4f46e5;
         }
 
         /* Empty state */
@@ -397,9 +407,12 @@
             border-radius: 10px;
             padding: 12px;
             margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .history-item:hover {
+            background: #f3f4f6;
         }
 
         .history-item .date {
@@ -407,9 +420,88 @@
             color: #6b7280;
         }
 
+        .history-item .location {
+            font-size: 0.85rem;
+            color: #4f46e5;
+            margin-top: 4px;
+        }
+
         .history-item .amount {
             font-weight: bold;
             color: #4f46e5;
+        }
+
+        .history-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        /* Locations dropdown */
+        .location-suggestions {
+            position: absolute;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 100;
+            width: calc(100% - 4px);
+            margin-left: 2px;
+        }
+
+        .location-suggestion {
+            padding: 10px 12px;
+            cursor: pointer;
+        }
+
+        .location-suggestion:hover {
+            background: #f3f4f6;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Audit details */
+        .audit-details {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 12px;
+            font-size: 0.85rem;
+        }
+
+        .audit-details h4 {
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .audit-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .audit-row:last-child {
+            border-bottom: none;
         }
 
         @media (max-width: 380px) {
@@ -419,6 +511,35 @@
             .stat-box .label {
                 font-size: 0.65rem;
             }
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Settings card */
+        .settings-input {
+            margin-bottom: 12px;
+        }
+
+        .settings-input label {
+            display: block;
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .settings-input input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .settings-saved {
+            color: #059669;
+            font-size: 0.85rem;
+            margin-top: 8px;
         }
     </style>
 </head>
@@ -427,102 +548,145 @@
         <header>
             <h1>🏸 Badminton Splitter</h1>
             <p>Split court costs fairly among players</p>
+            <div class="connection-status">
+                <span class="status-dot" id="status-dot"></span>
+                <span id="status-text">Connecting...</span>
+            </div>
         </header>
 
         <div class="tabs">
             <button class="tab active" onclick="showTab('input')">📝 Input</button>
             <button class="tab" onclick="showTab('results')">💰 Results</button>
             <button class="tab" onclick="showTab('history')">📜 History</button>
+            <button class="tab" onclick="showTab('settings')">⚙️</button>
         </div>
 
         <!-- INPUT TAB -->
         <div id="input-tab" class="tab-content active">
             <div class="card">
-                <h2>💱 Currency</h2>
-                <div class="currency-selector">
-                    <button class="currency-btn active" onclick="setCurrency('$', this)">$ USD</button>
-                    <button class="currency-btn" onclick="setCurrency('£', this)">£ GBP</button>
-                    <button class="currency-btn" onclick="setCurrency('€', this)">€ EUR</button>
-                    <button class="currency-btn" onclick="setCurrency('₹', this)">₹ INR</button>
-                    <button class="currency-btn" onclick="setCurrency('RM', this)">RM MYR</button>
+                <h2>📅 Session Details</h2>
+                <div id="sessions-container">
+                    <!-- Sessions will be added here dynamically -->
                 </div>
-            </div>
-
-            <div class="card">
-                <h2>📅 Weekly Sessions</h2>
-                <div id="weeks-container">
-                    <!-- Weeks will be added here dynamically -->
-                </div>
-                <button class="btn btn-secondary" onclick="addWeek()">
-                    ➕ Add Week
+                <button class="btn btn-secondary" onclick="addSession()">
+                    ➕ Add Session
                 </button>
             </div>
 
             <div class="card">
                 <h2>⭐ Quick Add Players</h2>
                 <p style="font-size: 0.85rem; color: #6b7280; margin-bottom: 12px;">
-                    Players you've added before will appear here for quick access.
+                    Tap a name to add to the last session
                 </p>
                 <div id="quick-add-players" class="quick-add">
-                    <!-- Quick add buttons will appear here -->
+                    <span style="color: #9ca3af; font-size: 0.85rem;">Loading players...</span>
                 </div>
             </div>
 
-            <button class="btn btn-primary" onclick="calculateCosts()">
+            <button class="btn btn-primary" onclick="calculateCosts()" id="calculate-btn">
                 🧮 Calculate Costs
+            </button>
+            
+            <button class="btn btn-success" onclick="saveToDatabase()" id="save-btn" style="margin-top: 12px; display: none;">
+                💾 Save to Database
             </button>
         </div>
 
         <!-- RESULTS TAB -->
         <div id="results-tab" class="tab-content">
-            <div class="results-section show">
-                <div class="card">
-                    <h2>📊 Summary</h2>
-                    <div class="summary-stats" id="summary-stats">
-                        <div class="stat-box">
-                            <div class="number" id="total-cost">$0</div>
-                            <div class="label">Total Cost</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="number" id="total-players">0</div>
-                            <div class="label">Players</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="number" id="total-weeks">0</div>
-                            <div class="label">Weeks</div>
-                        </div>
+            <div class="card">
+                <h2>📊 Summary</h2>
+                <div class="summary-stats" id="summary-stats">
+                    <div class="stat-box">
+                        <div class="number" id="total-cost">AED 0</div>
+                        <div class="label">Total Cost</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number" id="total-players">0</div>
+                        <div class="label">Players</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number" id="total-sessions">0</div>
+                        <div class="label">Sessions</div>
                     </div>
                 </div>
-
-                <div class="card">
-                    <h2>👥 Individual Amounts</h2>
-                    <div id="results-container">
-                        <div class="empty-state">
-                            <div class="icon">📊</div>
-                            <p>Add weeks and players, then calculate to see results</p>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="btn btn-primary" onclick="shareAllResults()">
-                    📤 Share All Results
-                </button>
             </div>
+
+            <div class="card">
+                <h2>👥 Individual Amounts</h2>
+                <div id="results-container">
+                    <div class="empty-state">
+                        <div class="icon">📊</div>
+                        <p>Add sessions and players, then calculate to see results</p>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="shareAllResults()">
+                📤 Share All Results
+            </button>
         </div>
 
         <!-- HISTORY TAB -->
         <div id="history-tab" class="tab-content">
             <div class="card">
                 <h2>📜 Calculation History</h2>
+                <p style="font-size: 0.85rem; color: #6b7280; margin-bottom: 12px;">
+                    Tap an entry to view details
+                </p>
                 <div id="history-container">
                     <div class="empty-state">
                         <div class="icon">📜</div>
-                        <p>Your calculation history will appear here</p>
+                        <p>Loading history...</p>
                     </div>
                 </div>
-                <button class="btn btn-secondary" onclick="clearHistory()" style="margin-top: 12px;">
-                    🗑️ Clear History
+            </div>
+        </div>
+
+        <!-- SETTINGS TAB -->
+        <div id="settings-tab" class="tab-content">
+            <div class="card">
+                <h2>⚙️ Supabase Configuration</h2>
+                <p style="font-size: 0.85rem; color: #6b7280; margin-bottom: 16px;">
+                    Enter your Supabase credentials to enable cloud sync
+                </p>
+                
+                <div class="settings-input">
+                    <label>Supabase Project URL</label>
+                    <input type="url" id="supabase-url" placeholder="https://xxxxx.supabase.co">
+                </div>
+                
+                <div class="settings-input">
+                    <label>Supabase Anon Key</label>
+                    <input type="password" id="supabase-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6...">
+                </div>
+                
+                <button class="btn btn-primary" onclick="saveSupabaseConfig()">
+                    💾 Save & Connect
                 </button>
+                
+                <div id="settings-status" class="settings-saved" style="display: none;"></div>
+            </div>
+
+            <div class="card">
+                <h2>📍 Saved Locations</h2>
+                <div id="saved-locations">
+                    <span style="color: #9ca3af; font-size: 0.85rem;">Loading locations...</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>👥 Manage Players</h2>
+                <div class="input-group">
+                    <label>Add New Player</label>
+                    <div class="add-player-row">
+                        <input type="text" id="new-player-name" placeholder="Enter player name...">
+                        <button onclick="addNewPlayerToDatabase()">+</button>
+                    </div>
+                </div>
+                <div id="all-players-list" style="margin-top: 12px;">
+                    <span style="color: #9ca3af; font-size: 0.85rem;">Loading players...</span>
+                </div>
             </div>
         </div>
     </div>
@@ -530,18 +694,239 @@
     <div class="toast" id="toast">Message copied!</div>
 
     <script>
-        let weekCounter = 0;
-        let currency = '$';
-        let allPlayers = new Set();
+        // ============ CONFIGURATION ============
+        let supabase = null;
+        let sessionCounter = 0;
+        const currency = 'AED';
+        let allPlayers = [];
+        let savedLocations = [];
         let calculationResults = null;
 
-        // Load saved data on startup
-        document.addEventListener('DOMContentLoaded', () => {
-            loadSavedPlayers();
-            loadHistory();
-            addWeek(); // Start with one week
+        // ============ INITIALIZATION ============
+        document.addEventListener('DOMContentLoaded', async () => {
+            loadSupabaseConfig();
+            addSession(); // Start with one session
         });
 
+        // ============ SUPABASE CONFIG ============
+        function loadSupabaseConfig() {
+            const url = localStorage.getItem('supabase-url');
+            const key = localStorage.getItem('supabase-key');
+            
+            if (url && key) {
+                document.getElementById('supabase-url').value = url;
+                document.getElementById('supabase-key').value = key;
+                initializeSupabase(url, key);
+            } else {
+                updateConnectionStatus('disconnected', 'Not configured');
+            }
+        }
+
+        function saveSupabaseConfig() {
+            const url = document.getElementById('supabase-url').value.trim();
+            const key = document.getElementById('supabase-key').value.trim();
+            
+            if (!url || !key) {
+                showToast('Please enter both URL and Key');
+                return;
+            }
+            
+            localStorage.setItem('supabase-url', url);
+            localStorage.setItem('supabase-key', key);
+            
+            initializeSupabase(url, key);
+        }
+
+        async function initializeSupabase(url, key) {
+            try {
+                updateConnectionStatus('connecting', 'Connecting...');
+                
+                supabase = window.supabase.createClient(url, key);
+                
+                // Test connection by fetching players
+                const { data, error } = await supabase.from('players').select('*').limit(1);
+                
+                if (error) throw error;
+                
+                updateConnectionStatus('connected', 'Connected');
+                document.getElementById('settings-status').textContent = '✓ Connected successfully!';
+                document.getElementById('settings-status').style.display = 'block';
+                
+                // Load data
+                await loadPlayers();
+                await loadLocations();
+                await loadHistory();
+                
+            } catch (error) {
+                console.error('Supabase connection error:', error);
+                updateConnectionStatus('error', 'Connection failed');
+                document.getElementById('settings-status').textContent = '✗ Connection failed: ' + error.message;
+                document.getElementById('settings-status').style.color = '#dc2626';
+                document.getElementById('settings-status').style.display = 'block';
+            }
+        }
+
+        function updateConnectionStatus(status, text) {
+            const dot = document.getElementById('status-dot');
+            const statusText = document.getElementById('status-text');
+            
+            dot.className = 'status-dot';
+            if (status === 'connected') dot.classList.add('connected');
+            if (status === 'error') dot.classList.add('error');
+            
+            statusText.textContent = text;
+        }
+
+        // ============ PLAYERS ============
+        async function loadPlayers() {
+            if (!supabase) return;
+            
+            try {
+                const { data, error } = await supabase
+                    .from('players')
+                    .select('*')
+                    .order('name');
+                
+                if (error) throw error;
+                
+                allPlayers = data || [];
+                updateQuickAddButtons();
+                updatePlayersListInSettings();
+                
+            } catch (error) {
+                console.error('Error loading players:', error);
+                showToast('Error loading players');
+            }
+        }
+
+        function updateQuickAddButtons() {
+            const container = document.getElementById('quick-add-players');
+            
+            if (allPlayers.length === 0) {
+                container.innerHTML = '<span style="color: #9ca3af; font-size: 0.85rem;">No players yet. Add some in Settings.</span>';
+                return;
+            }
+            
+            container.innerHTML = allPlayers.map(player => 
+                `<button class="quick-add-btn" onclick="addPlayerToCurrentSession('${player.id}', '${player.name}')">${player.name}</button>`
+            ).join('');
+        }
+
+        function updatePlayersListInSettings() {
+            const container = document.getElementById('all-players-list');
+            
+            if (allPlayers.length === 0) {
+                container.innerHTML = '<span style="color: #9ca3af; font-size: 0.85rem;">No players yet</span>';
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="player-tags">
+                    ${allPlayers.map(player => 
+                        `<span class="player-tag">${player.name} <span class="remove" onclick="deletePlayer('${player.id}')">×</span></span>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        async function addNewPlayerToDatabase() {
+            if (!supabase) {
+                showToast('Please configure Supabase first');
+                return;
+            }
+            
+            const input = document.getElementById('new-player-name');
+            const name = input.value.trim();
+            
+            if (!name) {
+                showToast('Please enter a player name');
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase
+                    .from('players')
+                    .insert([{ name: name }])
+                    .select();
+                
+                if (error) {
+                    if (error.code === '23505') {
+                        showToast('Player already exists');
+                    } else {
+                        throw error;
+                    }
+                    return;
+                }
+                
+                input.value = '';
+                await loadPlayers();
+                showToast('Player added!');
+                
+            } catch (error) {
+                console.error('Error adding player:', error);
+                showToast('Error adding player');
+            }
+        }
+
+        async function deletePlayer(playerId) {
+            if (!confirm('Delete this player?')) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('players')
+                    .delete()
+                    .eq('id', playerId);
+                
+                if (error) throw error;
+                
+                await loadPlayers();
+                showToast('Player deleted');
+                
+            } catch (error) {
+                console.error('Error deleting player:', error);
+                showToast('Error deleting player');
+            }
+        }
+
+        // ============ LOCATIONS ============
+        async function loadLocations() {
+            if (!supabase) return;
+            
+            try {
+                const { data, error } = await supabase
+                    .from('sessions')
+                    .select('court_location')
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                // Get unique locations
+                savedLocations = [...new Set(data.map(s => s.court_location))];
+                updateLocationsInSettings();
+                
+            } catch (error) {
+                console.error('Error loading locations:', error);
+            }
+        }
+
+        function updateLocationsInSettings() {
+            const container = document.getElementById('saved-locations');
+            
+            if (savedLocations.length === 0) {
+                container.innerHTML = '<span style="color: #9ca3af; font-size: 0.85rem;">No locations saved yet</span>';
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="player-tags">
+                    ${savedLocations.map(loc => 
+                        `<span class="player-tag">📍 ${loc}</span>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        // ============ SESSIONS (UI) ============
         function showTab(tabName) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -550,141 +935,175 @@
             document.getElementById(`${tabName}-tab`).classList.add('active');
         }
 
-        function setCurrency(curr, btn) {
-            currency = curr;
-            document.querySelectorAll('.currency-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+        function addSession() {
+            sessionCounter++;
+            const container = document.getElementById('sessions-container');
             
-            if (calculationResults) {
-                displayResults(calculationResults);
-            }
-        }
-
-        function addWeek() {
-            weekCounter++;
-            const container = document.getElementById('weeks-container');
+            const today = new Date().toISOString().split('T')[0];
             
-            const weekDiv = document.createElement('div');
-            weekDiv.className = 'week-container';
-            weekDiv.id = `week-${weekCounter}`;
-            weekDiv.innerHTML = `
-                <div class="week-header">
-                    <h3>Week ${weekCounter}</h3>
-                    <button class="delete-week" onclick="deleteWeek(${weekCounter})">🗑️ Remove</button>
+            const sessionDiv = document.createElement('div');
+            sessionDiv.className = 'session-container';
+            sessionDiv.id = `session-${sessionCounter}`;
+            sessionDiv.innerHTML = `
+                <div class="session-header">
+                    <h3>Session ${sessionCounter}</h3>
+                    <button class="delete-session" onclick="deleteSession(${sessionCounter})">🗑️ Remove</button>
                 </div>
+                
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Date</label>
+                        <input type="date" id="date-${sessionCounter}" value="${today}">
+                    </div>
+                    <div class="input-group">
+                        <label>Court Cost (AED)</label>
+                        <input type="number" id="cost-${sessionCounter}" placeholder="0.00" inputmode="decimal">
+                    </div>
+                </div>
+                
                 <div class="input-group">
-                    <label>Court Cost</label>
-                    <input type="number" id="cost-${weekCounter}" placeholder="Enter cost..." inputmode="decimal">
+                    <label>Court Location</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="location-${sessionCounter}" placeholder="Enter court location..." 
+                               onfocus="showLocationSuggestions(${sessionCounter})" 
+                               onblur="hideLocationSuggestions(${sessionCounter})"
+                               oninput="filterLocationSuggestions(${sessionCounter})">
+                        <div class="location-suggestions" id="location-suggestions-${sessionCounter}" style="display: none;"></div>
+                    </div>
                 </div>
+                
                 <div class="input-group">
                     <label>Players (press Enter or + to add)</label>
                     <div class="add-player-row">
-                        <input type="text" id="player-input-${weekCounter}" placeholder="Enter player name..." 
-                               onkeypress="handlePlayerInput(event, ${weekCounter})">
-                        <button onclick="addPlayer(${weekCounter})">+</button>
+                        <input type="text" id="player-input-${sessionCounter}" placeholder="Enter player name..." 
+                               onkeypress="handlePlayerInput(event, ${sessionCounter})"
+                               list="players-datalist">
+                        <button onclick="addPlayerToSession(${sessionCounter})">+</button>
                     </div>
-                    <div class="player-tags" id="players-${weekCounter}"></div>
+                    <div class="player-tags" id="players-${sessionCounter}"></div>
                 </div>
             `;
             
-            container.appendChild(weekDiv);
+            container.appendChild(sessionDiv);
         }
 
-        function deleteWeek(weekNum) {
-            const weekDiv = document.getElementById(`week-${weekNum}`);
-            if (weekDiv) {
-                weekDiv.remove();
+        function deleteSession(sessionNum) {
+            const sessionDiv = document.getElementById(`session-${sessionNum}`);
+            if (sessionDiv) {
+                sessionDiv.remove();
             }
         }
 
-        function handlePlayerInput(event, weekNum) {
+        function showLocationSuggestions(sessionNum) {
+            const container = document.getElementById(`location-suggestions-${sessionNum}`);
+            if (savedLocations.length === 0) return;
+            
+            container.innerHTML = savedLocations.map(loc => 
+                `<div class="location-suggestion" onmousedown="selectLocation(${sessionNum}, '${loc}')">${loc}</div>`
+            ).join('');
+            container.style.display = 'block';
+        }
+
+        function hideLocationSuggestions(sessionNum) {
+            setTimeout(() => {
+                document.getElementById(`location-suggestions-${sessionNum}`).style.display = 'none';
+            }, 200);
+        }
+
+        function filterLocationSuggestions(sessionNum) {
+            const input = document.getElementById(`location-${sessionNum}`).value.toLowerCase();
+            const container = document.getElementById(`location-suggestions-${sessionNum}`);
+            
+            const filtered = savedLocations.filter(loc => loc.toLowerCase().includes(input));
+            
+            if (filtered.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+            
+            container.innerHTML = filtered.map(loc => 
+                `<div class="location-suggestion" onmousedown="selectLocation(${sessionNum}, '${loc}')">${loc}</div>`
+            ).join('');
+            container.style.display = 'block';
+        }
+
+        function selectLocation(sessionNum, location) {
+            document.getElementById(`location-${sessionNum}`).value = location;
+        }
+
+        // ============ PLAYER MANAGEMENT IN SESSION ============
+        function handlePlayerInput(event, sessionNum) {
             if (event.key === 'Enter') {
                 event.preventDefault();
-                addPlayer(weekNum);
+                addPlayerToSession(sessionNum);
             }
         }
 
-        function addPlayer(weekNum, playerName = null) {
-            const input = document.getElementById(`player-input-${weekNum}`);
+        function addPlayerToSession(sessionNum, playerId = null, playerName = null) {
+            const input = document.getElementById(`player-input-${sessionNum}`);
             const name = playerName || input.value.trim();
             
             if (!name) return;
             
-            const container = document.getElementById(`players-${weekNum}`);
+            const container = document.getElementById(`players-${sessionNum}`);
             
-            // Check if player already exists in this week
+            // Check if player already exists in this session
             const existingTags = container.querySelectorAll('.player-tag');
             for (let tag of existingTags) {
                 if (tag.dataset.name.toLowerCase() === name.toLowerCase()) {
-                    showToast('Player already added to this week!');
-                    input.value = '';
+                    showToast('Player already added to this session!');
+                    if (input) input.value = '';
                     return;
                 }
+            }
+            
+            // Find player ID if not provided
+            if (!playerId) {
+                const existingPlayer = allPlayers.find(p => p.name.toLowerCase() === name.toLowerCase());
+                playerId = existingPlayer ? existingPlayer.id : null;
             }
             
             const tag = document.createElement('span');
             tag.className = 'player-tag';
             tag.dataset.name = name;
+            tag.dataset.id = playerId || '';
             tag.innerHTML = `${name} <span class="remove" onclick="this.parentElement.remove()">×</span>`;
             container.appendChild(tag);
             
-            // Add to all players set and save
-            allPlayers.add(name);
-            savePlayers();
-            updateQuickAdd();
-            
-            input.value = '';
-            input.focus();
+            if (input) input.value = '';
         }
 
-        function updateQuickAdd() {
-            const container = document.getElementById('quick-add-players');
-            container.innerHTML = '';
-            
-            allPlayers.forEach(player => {
-                const btn = document.createElement('button');
-                btn.className = 'quick-add-btn';
-                btn.textContent = player;
-                btn.onclick = () => addPlayerToCurrentWeek(player);
-                container.appendChild(btn);
-            });
-        }
-
-        function addPlayerToCurrentWeek(playerName) {
-            // Find the last week container
-            const weeks = document.querySelectorAll('.week-container');
-            if (weeks.length > 0) {
-                const lastWeek = weeks[weeks.length - 1];
-                const weekNum = lastWeek.id.split('-')[1];
-                addPlayer(parseInt(weekNum), playerName);
+        function addPlayerToCurrentSession(playerId, playerName) {
+            // Find the last session container
+            const sessions = document.querySelectorAll('.session-container');
+            if (sessions.length > 0) {
+                const lastSession = sessions[sessions.length - 1];
+                const sessionNum = lastSession.id.split('-')[1];
+                addPlayerToSession(parseInt(sessionNum), playerId, playerName);
             }
         }
 
-        function savePlayers() {
-            localStorage.setItem('badminton-players', JSON.stringify([...allPlayers]));
-        }
-
-        function loadSavedPlayers() {
-            const saved = localStorage.getItem('badminton-players');
-            if (saved) {
-                allPlayers = new Set(JSON.parse(saved));
-                updateQuickAdd();
-            }
-        }
-
+        // ============ CALCULATIONS ============
         function calculateCosts() {
-            const weeks = [];
-            const weekContainers = document.querySelectorAll('.week-container');
+            const sessions = [];
+            const sessionContainers = document.querySelectorAll('.session-container');
             
-            weekContainers.forEach((container, index) => {
-                const weekNum = container.id.split('-')[1];
-                const cost = parseFloat(document.getElementById(`cost-${weekNum}`).value) || 0;
-                const playerTags = container.querySelectorAll(`#players-${weekNum} .player-tag`);
-                const players = Array.from(playerTags).map(tag => tag.dataset.name);
+            sessionContainers.forEach((container, index) => {
+                const sessionNum = container.id.split('-')[1];
+                const date = document.getElementById(`date-${sessionNum}`).value;
+                const cost = parseFloat(document.getElementById(`cost-${sessionNum}`).value) || 0;
+                const location = document.getElementById(`location-${sessionNum}`).value.trim();
+                const playerTags = container.querySelectorAll(`#players-${sessionNum} .player-tag`);
+                const players = Array.from(playerTags).map(tag => ({
+                    id: tag.dataset.id,
+                    name: tag.dataset.name
+                }));
                 
                 if (cost > 0 && players.length > 0) {
-                    weeks.push({
-                        weekNum: index + 1,
+                    sessions.push({
+                        sessionNum: index + 1,
+                        date: date,
+                        location: location || 'Unknown Location',
                         cost: cost,
                         players: players,
                         perPlayer: cost / players.length
@@ -692,52 +1111,61 @@
                 }
             });
 
-            if (weeks.length === 0) {
-                showToast('Please add at least one week with cost and players');
+            if (sessions.length === 0) {
+                showToast('Please add at least one session with cost and players');
                 return;
             }
 
             // Calculate totals per player
             const playerTotals = {};
             
-            weeks.forEach(week => {
-                week.players.forEach(player => {
-                    if (!playerTotals[player]) {
-                        playerTotals[player] = {
-                            name: player,
+            sessions.forEach(session => {
+                session.players.forEach(player => {
+                    if (!playerTotals[player.name]) {
+                        playerTotals[player.name] = {
+                            id: player.id,
+                            name: player.name,
                             total: 0,
                             breakdown: []
                         };
                     }
-                    playerTotals[player].total += week.perPlayer;
-                    playerTotals[player].breakdown.push({
-                        week: week.weekNum,
-                        cost: week.cost,
-                        players: week.players.length,
-                        amount: week.perPlayer
+                    playerTotals[player.name].total += session.perPlayer;
+                    playerTotals[player.name].breakdown.push({
+                        sessionNum: session.sessionNum,
+                        date: session.date,
+                        location: session.location,
+                        cost: session.cost,
+                        players: session.players.length,
+                        amount: session.perPlayer
                     });
                 });
             });
 
             calculationResults = {
-                weeks: weeks,
+                sessions: sessions,
                 playerTotals: playerTotals,
-                totalCost: weeks.reduce((sum, w) => sum + w.cost, 0),
+                totalCost: sessions.reduce((sum, s) => sum + s.cost, 0),
                 totalPlayers: Object.keys(playerTotals).length,
-                totalWeeks: weeks.length
+                totalSessions: sessions.length,
+                calculatedAt: new Date().toISOString()
             };
 
             displayResults(calculationResults);
-            saveToHistory(calculationResults);
+            
+            // Show save button if connected
+            if (supabase) {
+                document.getElementById('save-btn').style.display = 'block';
+            }
+            
             showTab('results');
             document.querySelectorAll('.tab')[1].click();
         }
 
         function displayResults(results) {
             // Update summary
-            document.getElementById('total-cost').textContent = `${currency}${results.totalCost.toFixed(2)}`;
+            document.getElementById('total-cost').textContent = `${currency} ${results.totalCost.toFixed(2)}`;
             document.getElementById('total-players').textContent = results.totalPlayers;
-            document.getElementById('total-weeks').textContent = results.totalWeeks;
+            document.getElementById('total-sessions').textContent = results.totalSessions;
 
             // Display individual results
             const container = document.getElementById('results-container');
@@ -752,13 +1180,16 @@
                 div.className = 'player-result';
                 
                 let breakdownHTML = player.breakdown.map(b => 
-                    `<div><span>Week ${b.week} (${b.players} players × ${currency}${b.cost.toFixed(2)})</span><span>${currency}${b.amount.toFixed(2)}</span></div>`
+                    `<div>
+                        <span>${b.date} @ ${b.location}</span>
+                        <span>${currency} ${b.amount.toFixed(2)}</span>
+                    </div>`
                 ).join('');
 
                 div.innerHTML = `
                     <div class="player-result-header">
                         <h4>${player.name}</h4>
-                        <span class="total">${currency}${player.total.toFixed(2)}</span>
+                        <span class="total">${currency} ${player.total.toFixed(2)}</span>
                     </div>
                     <div class="player-breakdown">
                         ${breakdownHTML}
@@ -771,15 +1202,192 @@
             });
         }
 
-        function generatePlayerMessage(player) {
-            const data = calculationResults.playerTotals[player];
+        // ============ SAVE TO DATABASE ============
+        async function saveToDatabase() {
+            if (!supabase || !calculationResults) {
+                showToast('Cannot save - not connected or no results');
+                return;
+            }
+
+            const btn = document.getElementById('save-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Saving...';
+
+            try {
+                // 1. Save each session
+                for (const session of calculationResults.sessions) {
+                    // Insert session
+                    const { data: sessionData, error: sessionError } = await supabase
+                        .from('sessions')
+                        .insert([{
+                            session_date: session.date,
+                            week_number: session.sessionNum,
+                            court_location: session.location,
+                            court_cost: session.cost,
+                            currency: currency
+                        }])
+                        .select();
+
+                    if (sessionError) throw sessionError;
+
+                    const sessionId = sessionData[0].id;
+
+                    // 2. Save attendance for each player in this session
+                    for (const player of session.players) {
+                        // First ensure player exists in database
+                        let playerId = player.id;
+                        
+                        if (!playerId) {
+                            // Try to find existing player or create new one
+                            const { data: existingPlayer } = await supabase
+                                .from('players')
+                                .select('id')
+                                .ilike('name', player.name)
+                                .single();
+
+                            if (existingPlayer) {
+                                playerId = existingPlayer.id;
+                            } else {
+                                const { data: newPlayer, error: playerError } = await supabase
+                                    .from('players')
+                                    .insert([{ name: player.name }])
+                                    .select();
+                                
+                                if (playerError && playerError.code !== '23505') throw playerError;
+                                playerId = newPlayer ? newPlayer[0].id : null;
+                            }
+                        }
+
+                        if (playerId) {
+                            await supabase
+                                .from('session_attendance')
+                                .insert([{
+                                    session_id: sessionId,
+                                    player_id: playerId,
+                                    amount_owed: session.perPlayer
+                                }]);
+                        }
+                    }
+                }
+
+                // 3. Save calculation history
+                await supabase
+                    .from('calculation_history')
+                    .insert([{
+                        total_cost: calculationResults.totalCost,
+                        total_players: calculationResults.totalPlayers,
+                        total_sessions: calculationResults.totalSessions,
+                        breakdown: calculationResults
+                    }]);
+
+                showToast('Saved to database successfully!');
+                btn.innerHTML = '✓ Saved!';
+                
+                // Reload data
+                await loadPlayers();
+                await loadLocations();
+                await loadHistory();
+
+            } catch (error) {
+                console.error('Error saving to database:', error);
+                showToast('Error saving: ' + error.message);
+                btn.innerHTML = '💾 Save to Database';
+                btn.disabled = false;
+            }
+        }
+
+        // ============ HISTORY ============
+        async function loadHistory() {
+            if (!supabase) {
+                document.getElementById('history-container').innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">⚙️</div>
+                        <p>Configure Supabase in Settings to see history</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase
+                    .from('calculation_history')
+                    .select('*')
+                    .order('calculation_date', { ascending: false })
+                    .limit(20);
+                
+                if (error) throw error;
+                
+                const container = document.getElementById('history-container');
+                
+                if (!data || data.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon">📜</div>
+                            <p>No calculation history yet</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = data.map((item, index) => {
+                    const date = new Date(item.calculation_date);
+                    const locations = item.breakdown.sessions 
+                        ? [...new Set(item.breakdown.sessions.map(s => s.location))].join(', ')
+                        : 'N/A';
+                    
+                    return `
+                        <div class="history-item" onclick="viewHistoryDetail(${index})">
+                            <div class="history-item-header">
+                                <div>
+                                    <strong>${date.toLocaleDateString()}</strong>
+                                    <div class="date">${date.toLocaleTimeString()}</div>
+                                    <div class="location">📍 ${locations}</div>
+                                </div>
+                                <div class="amount">${currency} ${item.total_cost.toFixed(2)}</div>
+                            </div>
+                            <div style="font-size: 0.8rem; color: #6b7280; margin-top: 4px;">
+                                ${item.total_sessions} session(s), ${item.total_players} players
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                // Store for detail view
+                window.historyData = data;
+                
+            } catch (error) {
+                console.error('Error loading history:', error);
+                document.getElementById('history-container').innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">❌</div>
+                        <p>Error loading history</p>
+                    </div>
+                `;
+            }
+        }
+
+        function viewHistoryDetail(index) {
+            if (!window.historyData || !window.historyData[index]) return;
+            
+            const item = window.historyData[index];
+            calculationResults = item.breakdown;
+            displayResults(calculationResults);
+            
+            showTab('results');
+            document.querySelectorAll('.tab')[1].click();
+        }
+
+        // ============ SHARING ============
+        function generatePlayerMessage(playerName) {
+            const data = calculationResults.playerTotals[playerName];
             let message = `🏸 Badminton Cost Share 🏸\n\n`;
-            message += `Hi ${player}! 👋\n\n`;
-            message += `Your total for this month: ${currency}${data.total.toFixed(2)}\n\n`;
+            message += `Hi ${playerName}! 👋\n\n`;
+            message += `Your total: ${currency} ${data.total.toFixed(2)}\n\n`;
             message += `📋 Breakdown:\n`;
             
             data.breakdown.forEach(b => {
-                message += `• Week ${b.week}: ${currency}${b.amount.toFixed(2)} (${b.players} players shared ${currency}${b.cost.toFixed(2)})\n`;
+                message += `• ${b.date} @ ${b.location}\n`;
+                message += `  ${currency} ${b.amount.toFixed(2)} (${b.players} players shared ${currency} ${b.cost.toFixed(2)})\n`;
             });
             
             message += `\nThanks for playing! See you on the court! 🏸`;
@@ -805,16 +1413,20 @@
         function shareAllResults() {
             if (!calculationResults) return;
             
+            // Get unique locations
+            const locations = [...new Set(calculationResults.sessions.map(s => s.location))].join(', ');
+            
             let message = `🏸 Badminton Cost Share - Summary 🏸\n\n`;
-            message += `📊 Total Court Cost: ${currency}${calculationResults.totalCost.toFixed(2)}\n`;
+            message += `📍 Location(s): ${locations}\n`;
+            message += `📊 Total Court Cost: ${currency} ${calculationResults.totalCost.toFixed(2)}\n`;
             message += `👥 Players: ${calculationResults.totalPlayers}\n`;
-            message += `📅 Weeks: ${calculationResults.totalWeeks}\n\n`;
+            message += `📅 Sessions: ${calculationResults.totalSessions}\n\n`;
             message += `💰 Individual Amounts:\n`;
             
             Object.values(calculationResults.playerTotals)
                 .sort((a, b) => b.total - a.total)
                 .forEach(player => {
-                    message += `• ${player.name}: ${currency}${player.total.toFixed(2)}\n`;
+                    message += `• ${player.name}: ${currency} ${player.total.toFixed(2)}\n`;
                 });
             
             message += `\nThanks everyone! See you on the court! 🏸`;
@@ -835,7 +1447,6 @@
             navigator.clipboard.writeText(text).then(() => {
                 showToast('Message copied to clipboard!');
             }).catch(err => {
-                // Fallback for older browsers
                 const textarea = document.createElement('textarea');
                 textarea.value = text;
                 document.body.appendChild(textarea);
@@ -851,65 +1462,6 @@
             toast.textContent = message;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        function saveToHistory(results) {
-            const history = JSON.parse(localStorage.getItem('badminton-history') || '[]');
-            history.unshift({
-                date: new Date().toLocaleDateString(),
-                time: new Date().toLocaleTimeString(),
-                totalCost: results.totalCost,
-                players: results.totalPlayers,
-                weeks: results.totalWeeks,
-                data: results
-            });
-            // Keep only last 10 calculations
-            if (history.length > 10) history.pop();
-            localStorage.setItem('badminton-history', JSON.stringify(history));
-            loadHistory();
-        }
-
-        function loadHistory() {
-            const history = JSON.parse(localStorage.getItem('badminton-history') || '[]');
-            const container = document.getElementById('history-container');
-            
-            if (history.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon">📜</div>
-                        <p>Your calculation history will appear here</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = history.map((item, index) => `
-                <div class="history-item" onclick="loadFromHistory(${index})">
-                    <div>
-                        <div><strong>${item.date}</strong> at ${item.time}</div>
-                        <div class="date">${item.weeks} weeks, ${item.players} players</div>
-                    </div>
-                    <div class="amount">${currency}${item.totalCost.toFixed(2)}</div>
-                </div>
-            `).join('');
-        }
-
-        function loadFromHistory(index) {
-            const history = JSON.parse(localStorage.getItem('badminton-history') || '[]');
-            if (history[index]) {
-                calculationResults = history[index].data;
-                displayResults(calculationResults);
-                showTab('results');
-                document.querySelectorAll('.tab')[1].click();
-            }
-        }
-
-        function clearHistory() {
-            if (confirm('Are you sure you want to clear all history?')) {
-                localStorage.removeItem('badminton-history');
-                loadHistory();
-                showToast('History cleared!');
-            }
         }
     </script>
 </body>
